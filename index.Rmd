@@ -21,7 +21,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Wildlife is one of the programs that Osa Consevation harbours, you can hace a look of the organizacion here: https://osaconservation.org/
+
+
+The main goal of Wildlife program is to understand, protect and restore wildlife within the Amistosa climate lifeboat for future generations through biodiversity monitoring at the landscape scale, application of conservation technologies, engaging local stakeholders, and adopting evidence-based restoration techniques, ultimately advancing climate change adaptation and resilience of the South Pacific region of Costa Rica.
+
+One of the main tools used here are camera traps. Those are automa
+
+Here we provide the main results of the current projects carried out by our team.
+
+
+## Study area and survey locations
 
 ```{r c01, echo=F, message=F, include=F}
 knitr::opts_chunk$set(echo = FALSE, message=F, warning=F)
@@ -47,7 +57,7 @@ library(stringr)
 summary(cars)
 ```
 
-## Including Plots
+# Long Term Monitoring
 
 You can also embed plots, for example:
 
@@ -59,13 +69,23 @@ plot(pressure)
 
 The following represents the data exploration for the data collected during the collaboration between Osa Conservation for the project entitled:
 
-**Main Ttile.**
+**Main Title.**
 
 Also known as:
 
-**Long term monitorins**
+**Long term monitoring**
 
 sdfjkhsdfl
 
-## Study area and survey locations
+# Exploration to Fila Costeña
 
+
+# Arboreal Bridges
+
+
+
+# Farms for Nature
+
+
+
+# Piro Restoration plots
