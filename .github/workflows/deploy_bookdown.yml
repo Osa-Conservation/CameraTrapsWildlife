@@ -17,7 +17,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
       - name: Install rmarkdown
         run: Rscript -e 'install.packages(c("rmarkdown","bookdown"))'
-        - name: Install system dependencies
+      - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libudunits2-dev libgdal-dev libgeos-dev libproj-dev
