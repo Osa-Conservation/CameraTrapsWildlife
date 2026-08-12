@@ -59,8 +59,12 @@ jobs:
       - name: Render Book
         env: 
           GOOGLE_AUTHENTICATION_CREDENTIALS: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS }}
+<<<<<<< HEAD
         run: Rscript -e 'rmarkdown::render_book("index.Rmd")'
           mv Index.html index.html
+=======
+        run: Rscript -e 'bookdown::render_book("index.Rmd")'
+>>>>>>> c8aa845bce3337a4058030cd93b0ea9464c5b51c
       - uses: actions/upload-artifact@v4
         with:
           name: _book
