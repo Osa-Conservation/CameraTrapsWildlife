@@ -1,21 +1,47 @@
 ---
-title: "index"
-author: "Wildlife"
-date: "2026-08-12"
-output: html_document
+title: "Camera traps Wildlife"
+author:
+  - Osa Conservation Wildlife Team and Earthwatch
+site: bookdown::test-bookdown
+output:
+  bookdown::gitbook:
+    css: styles.css
+date: '`r paste("Updated on", Sys.Date())`'
+documentclass: book
+biblio-style: apalike
+link-citations: yes
+editor_options:
+  chunk_output_type: console
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+# Introduction
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r c01, echo=F, message=F, include=F}
+knitr::opts_chunk$set(echo = FALSE, message=F, warning=F)
 
-```{r cars}
+library(dplyr)
+library(tidyr)
+library(leaflet)
+library(units)
+library(sf)
+library(viridis)
+library(kableExtra)
+library(lubridate)
+library(plotly)
+library(googledrive)
+library(purrr)
+library(readxl)
+library(RColorBrewer)
+library(scales)
+library(ggrepel)
+library(stringr)
 summary(cars)
 1+1
 ```
