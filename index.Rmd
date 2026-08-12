@@ -54,6 +54,14 @@ library(ggrepel)
 library(stringr)
 
 
+#drive_auth()
+googledrive::drive_auth(path = Sys.getenv("GOOGLE_AUTHENTICATION_CREDENTIALS"))
+data_path <- "data"
+dir.create(data_path) 
+#test2
+# For when the trapping effort file is sorted
+# googledrive::drive_auth(path = Sys.getenv("GOOGLE_AUTHENTICATION_CREDENTIALS"))
+
 summary(cars)
 ```
 
@@ -61,9 +69,35 @@ summary(cars)
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
+```{r, c02, include=F, message=F, warning=F, results="hide"}
 
-plot(pressure)
+#Import the shapefiles for the maps
+dir.create("shapefiles")
+shp_folder <- drive_ls(path = as_id("1tIPtT8gXcLRPW26IqH1wOjm9_cjhJG9L"), recursive=T)
+
+drive_download(file = as_id(shp_folder$id[2]), path = paste0("shapefiles/", shp_folder$name[2]), overwrite = TRUE)
+
+LTM_Map <- st_read("shapefiles/LongTermMonitoring2026.kml")
+LTM_Map2<- st_zm(LTM_Map, drop = TRUE, what = "ZM")
+```
+
+
+here goes the map
+
+```{r}
+
+leaflet(LTM_Map2) %>% 
+  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addProviderTiles(providers$OpenStreetMap, group = "Street Map") %>%
+  addCircleMarkers(
+    radius = 3, 
+    fillOpacity = 0.8
+  ) %>% 
+  addLayersControl(
+    baseGroups = c("Street Map","Satellite"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  addScaleBar(position = "topright")
 
 ```
 
