@@ -46,11 +46,11 @@ jobs:
       - name: Render Book
         env: 
           GOOGLE_AUTHENTICATION_CREDENTIALS: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS }}
-        run: Rscript -e 'rmarkdown::render("index.Rmd")'  
+        run: Rscript -e 'bookdown::render_book("index.Rmd")'  
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .  
+          publish_dir: _book  
           publish_branch: gh-pages
           force_orphan: true
