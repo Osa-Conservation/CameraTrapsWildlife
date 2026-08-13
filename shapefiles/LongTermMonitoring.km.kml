@@ -1,0 +1,1097 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="root_doc">
+    <Schema id="ltm_jul2026" name="ltm_jul2026">
+      <SimpleField name="locationID" type="string"/>
+      <SimpleField name="siteID" type="string"/>
+      <SimpleField name="longitude" type="float"/>
+      <SimpleField name="latitude" type="float"/>
+      <SimpleField name="operation" type="string"/>
+    </Schema>
+    <Schema id="LTM.schema">
+      <SimpleField name="locationID" type="string"/>
+      <SimpleField name="siteID" type="string"/>
+      <SimpleField name="longitude" type="double"/>
+      <SimpleField name="latitude" type="double"/>
+      <SimpleField name="operation" type="string"/>
+    </Schema>
+    <Folder>
+      <name>ltm_jul2026</name>
+      <Placemark id="ltm_jul2026.1">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Alvaro Ugalde tree</SimpleData>
+            <SimpleData name="siteID">UGT_1</SimpleData>
+            <SimpleData name="longitude">-83.334841</SimpleData>
+            <SimpleData name="latitude">8.409785</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.334841,8.409785,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.2">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Arbolito 1S</SimpleData>
+            <SimpleData name="siteID">ARB-1S</SimpleData>
+            <SimpleData name="longitude">-83.357838</SimpleData>
+            <SimpleData name="latitude">8.443473</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.357838,8.443473,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.3">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Arbolito 2S</SimpleData>
+            <SimpleData name="siteID">ARB-2S</SimpleData>
+            <SimpleData name="longitude">-83.361063</SimpleData>
+            <SimpleData name="latitude">8.455643</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.361063,8.455643,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.4">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Arbolito 3S</SimpleData>
+            <SimpleData name="siteID">ARB-3S</SimpleData>
+            <SimpleData name="longitude">-83.3742</SimpleData>
+            <SimpleData name="latitude">8.45589</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.3742,8.45589,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.5">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Arbolito 4S</SimpleData>
+            <SimpleData name="siteID">ARB-4S</SimpleData>
+            <SimpleData name="longitude">-83.3768</SimpleData>
+            <SimpleData name="latitude">8.46047</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.3768,8.46047,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.6">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Arbolito 5S</SimpleData>
+            <SimpleData name="siteID">ARB-5S</SimpleData>
+            <SimpleData name="longitude">-83.36529</SimpleData>
+            <SimpleData name="latitude">8.46915</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.36529,8.46915,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.7">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">FincaNoble1</SimpleData>
+            <SimpleData name="siteID">FNO_1</SimpleData>
+            <SimpleData name="longitude">-83.33573</SimpleData>
+            <SimpleData name="latitude">8.73433</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33573,8.73433,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.8">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">FincaNoble2</SimpleData>
+            <SimpleData name="siteID">FNO_2</SimpleData>
+            <SimpleData name="longitude">-83.33472</SimpleData>
+            <SimpleData name="latitude">8.730334</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33472,8.730334,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.9">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Gamba 1</SimpleData>
+            <SimpleData name="siteID">GAM_1</SimpleData>
+            <SimpleData name="longitude">-83.17074878</SimpleData>
+            <SimpleData name="latitude">8.67620952</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.17074878,8.67620952,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.10">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Gamba 2</SimpleData>
+            <SimpleData name="siteID">GAM_2</SimpleData>
+            <SimpleData name="longitude">-83.17559</SimpleData>
+            <SimpleData name="latitude">8.67697</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.17559,8.67697,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.11">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">gamba 3</SimpleData>
+            <SimpleData name="siteID">GAM_3</SimpleData>
+            <SimpleData name="longitude">-83.17394</SimpleData>
+            <SimpleData name="latitude">8.67194</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.17394,8.67194,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.12">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Gamba 4</SimpleData>
+            <SimpleData name="siteID">GAM_4</SimpleData>
+            <SimpleData name="longitude">-83.1722</SimpleData>
+            <SimpleData name="latitude">8.66872</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.1722,8.66872,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.13">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Grison</SimpleData>
+            <SimpleData name="siteID">GRI_1</SimpleData>
+            <SimpleData name="longitude">-83.33779</SimpleData>
+            <SimpleData name="latitude">8.4091</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33779,8.4091,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.14">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Highland Campus 1</SimpleData>
+            <SimpleData name="siteID">HCA_1</SimpleData>
+            <SimpleData name="longitude">-82.93582</SimpleData>
+            <SimpleData name="latitude">9.01119</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -82.93582,9.01119,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.15">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Highland Campus 2</SimpleData>
+            <SimpleData name="siteID">HCA_2</SimpleData>
+            <SimpleData name="longitude">-82.93595</SimpleData>
+            <SimpleData name="latitude">9.01301</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -82.93595,9.01301,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.16">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Nazareno 1</SimpleData>
+            <SimpleData name="siteID">NAZ_1</SimpleData>
+            <SimpleData name="longitude">-83.318443</SimpleData>
+            <SimpleData name="latitude">8.40545</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.318443,8.40545,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.17">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Nazareno 2</SimpleData>
+            <SimpleData name="siteID">NAZ_2</SimpleData>
+            <SimpleData name="longitude">-83.317777</SimpleData>
+            <SimpleData name="latitude">8.404576</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.317777,8.404576,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.18">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Laguna Silvestre</SimpleData>
+            <SimpleData name="siteID">LIS_1</SimpleData>
+            <SimpleData name="longitude">-83.343922</SimpleData>
+            <SimpleData name="latitude">8.428401</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.343922,8.428401,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.19">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Lodge</SimpleData>
+            <SimpleData name="siteID">LOD_1</SimpleData>
+            <SimpleData name="longitude">-83.2044</SimpleData>
+            <SimpleData name="latitude">8.24072</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.2044,8.24072,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.20">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Lomas 1S</SimpleData>
+            <SimpleData name="siteID">LOM_1S</SimpleData>
+            <SimpleData name="longitude">-83.29323</SimpleData>
+            <SimpleData name="latitude">8.77809</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.29323,8.77809,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.21">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Lomas 2S</SimpleData>
+            <SimpleData name="siteID">LOM_2S</SimpleData>
+            <SimpleData name="longitude">-83.2947</SimpleData>
+            <SimpleData name="latitude">8.77034</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.2947,8.77034,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.22">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Lomas 3S</SimpleData>
+            <SimpleData name="siteID">LOM_3S</SimpleData>
+            <SimpleData name="longitude">-83.28991</SimpleData>
+            <SimpleData name="latitude">8.7643</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.28991,8.7643,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.23">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Ocelot Trail 1</SimpleData>
+            <SimpleData name="siteID">OCE_1</SimpleData>
+            <SimpleData name="longitude">-83.33003</SimpleData>
+            <SimpleData name="latitude">8.40706</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33003,8.40706,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.24">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Ocelot Trail 2</SimpleData>
+            <SimpleData name="siteID">OCE_2</SimpleData>
+            <SimpleData name="longitude">-83.33003</SimpleData>
+            <SimpleData name="latitude">8.40706</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33003,8.40706,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.25">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Rio Tigre 1</SimpleData>
+            <SimpleData name="siteID">RTI_1</SimpleData>
+            <SimpleData name="longitude">-83.40675</SimpleData>
+            <SimpleData name="latitude">8.51834</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.40675,8.51834,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.26">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Station</SimpleData>
+            <SimpleData name="siteID">STA_1</SimpleData>
+            <SimpleData name="longitude">-83.33836</SimpleData>
+            <SimpleData name="latitude">8.40456</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33836,8.40456,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.27">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Station 1S</SimpleData>
+            <SimpleData name="siteID">STA_2S</SimpleData>
+            <SimpleData name="longitude">-83.34736</SimpleData>
+            <SimpleData name="latitude">8.4086</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.34736,8.4086,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.28">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Station 2S</SimpleData>
+            <SimpleData name="siteID">STA_3S</SimpleData>
+            <SimpleData name="longitude">-83.3405</SimpleData>
+            <SimpleData name="latitude">8.41069</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.3405,8.41069,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.29">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Station 3S</SimpleData>
+            <SimpleData name="siteID">STA_4S</SimpleData>
+            <SimpleData name="longitude">-83.343802</SimpleData>
+            <SimpleData name="latitude">8.42217</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.343802,8.42217,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.30">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Station 4S</SimpleData>
+            <SimpleData name="siteID">STA_5S</SimpleData>
+            <SimpleData name="longitude">-83.323034</SimpleData>
+            <SimpleData name="latitude">8.410447</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.323034,8.410447,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.31">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Station 5S</SimpleData>
+            <SimpleData name="siteID">STA_6S</SimpleData>
+            <SimpleData name="longitude">-83.318923</SimpleData>
+            <SimpleData name="latitude">8.418519</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.318923,8.418519,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.32">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Station 6S</SimpleData>
+            <SimpleData name="siteID">STA_7S</SimpleData>
+            <SimpleData name="longitude">-83.33446</SimpleData>
+            <SimpleData name="latitude">8.42229</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33446,8.42229,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="ltm_jul2026.33">
+        <ExtendedData>
+          <SchemaData schemaUrl="#ltm_jul2026">
+            <SimpleData name="locationID">Station Ajo</SimpleData>
+            <SimpleData name="siteID">STA_8S</SimpleData>
+            <SimpleData name="longitude">-83.326855</SimpleData>
+            <SimpleData name="latitude">8.408702</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.326855,8.408702,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Document id="LTM">
+      <name>LTM</name>
+      <Placemark id="LTM.1">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Alvaro Ugalde tree</SimpleData>
+            <SimpleData name="siteID">UGT_1</SimpleData>
+            <SimpleData name="longitude">-83.334841</SimpleData>
+            <SimpleData name="latitude">8.409785</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.334841,8.409785,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.2">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Arbolito 1S</SimpleData>
+            <SimpleData name="siteID">ARB-1S</SimpleData>
+            <SimpleData name="longitude">-83.357838</SimpleData>
+            <SimpleData name="latitude">8.443473</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.357838,8.443473,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.3">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Arbolito 2S</SimpleData>
+            <SimpleData name="siteID">ARB-2S</SimpleData>
+            <SimpleData name="longitude">-83.361063</SimpleData>
+            <SimpleData name="latitude">8.455643</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.361063,8.455643,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.4">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Arbolito 3S</SimpleData>
+            <SimpleData name="siteID">ARB-3S</SimpleData>
+            <SimpleData name="longitude">-83.3742</SimpleData>
+            <SimpleData name="latitude">8.45589</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.3742,8.45589,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.5">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Arbolito 4S</SimpleData>
+            <SimpleData name="siteID">ARB-4S</SimpleData>
+            <SimpleData name="longitude">-83.3768</SimpleData>
+            <SimpleData name="latitude">8.46047</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.3768,8.46047,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.6">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Arbolito 5S</SimpleData>
+            <SimpleData name="siteID">ARB-5S</SimpleData>
+            <SimpleData name="longitude">-83.36529</SimpleData>
+            <SimpleData name="latitude">8.46915</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.36529,8.46915,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.7">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">FincaNoble1</SimpleData>
+            <SimpleData name="siteID">FNO_1</SimpleData>
+            <SimpleData name="longitude">-83.33573</SimpleData>
+            <SimpleData name="latitude">8.73433</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33573,8.73433,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.8">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">FincaNoble2</SimpleData>
+            <SimpleData name="siteID">FNO_2</SimpleData>
+            <SimpleData name="longitude">-83.33472</SimpleData>
+            <SimpleData name="latitude">8.730334</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33472,8.730334,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.9">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Gamba 1</SimpleData>
+            <SimpleData name="siteID">GAM_1</SimpleData>
+            <SimpleData name="longitude">-83.17074878</SimpleData>
+            <SimpleData name="latitude">8.67620952</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.17074878,8.67620952,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.10">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Gamba 2</SimpleData>
+            <SimpleData name="siteID">GAM_2</SimpleData>
+            <SimpleData name="longitude">-83.17559</SimpleData>
+            <SimpleData name="latitude">8.67697</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.17559,8.67697,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.11">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">gamba 3</SimpleData>
+            <SimpleData name="siteID">GAM_3</SimpleData>
+            <SimpleData name="longitude">-83.17394</SimpleData>
+            <SimpleData name="latitude">8.67194</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.17394,8.67194,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.12">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Gamba 4</SimpleData>
+            <SimpleData name="siteID">GAM_4</SimpleData>
+            <SimpleData name="longitude">-83.1722</SimpleData>
+            <SimpleData name="latitude">8.66872</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.1722,8.66872,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.13">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Grison</SimpleData>
+            <SimpleData name="siteID">GRI_1</SimpleData>
+            <SimpleData name="longitude">-83.33779</SimpleData>
+            <SimpleData name="latitude">8.4091</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33779,8.4091,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.14">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Highland Campus 1</SimpleData>
+            <SimpleData name="siteID">HCA_1</SimpleData>
+            <SimpleData name="longitude">-82.93582</SimpleData>
+            <SimpleData name="latitude">9.01119</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -82.93582,9.01119,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.15">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Highland Campus 2</SimpleData>
+            <SimpleData name="siteID">HCA_2</SimpleData>
+            <SimpleData name="longitude">-82.93595</SimpleData>
+            <SimpleData name="latitude">9.01301</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -82.93595,9.01301,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.16">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Nazareno 1</SimpleData>
+            <SimpleData name="siteID">NAZ_1</SimpleData>
+            <SimpleData name="longitude">-83.318443</SimpleData>
+            <SimpleData name="latitude">8.40545</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.318443,8.40545,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.17">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Nazareno 2</SimpleData>
+            <SimpleData name="siteID">NAZ_2</SimpleData>
+            <SimpleData name="longitude">-83.317777</SimpleData>
+            <SimpleData name="latitude">8.404576</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.317777,8.404576,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.18">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Laguna Silvestre</SimpleData>
+            <SimpleData name="siteID">LIS_1</SimpleData>
+            <SimpleData name="longitude">-83.343922</SimpleData>
+            <SimpleData name="latitude">8.428401</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.343922,8.428401,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.19">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Lodge</SimpleData>
+            <SimpleData name="siteID">LOD_1</SimpleData>
+            <SimpleData name="longitude">-83.34554</SimpleData>
+            <SimpleData name="latitude">8.40196</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.34554,8.40196,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.20">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Lomas 1S</SimpleData>
+            <SimpleData name="siteID">LOM_1S</SimpleData>
+            <SimpleData name="longitude">-83.29323</SimpleData>
+            <SimpleData name="latitude">8.77809</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.29323,8.77809,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.21">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Lomas 2S</SimpleData>
+            <SimpleData name="siteID">LOM_2S</SimpleData>
+            <SimpleData name="longitude">-83.2947</SimpleData>
+            <SimpleData name="latitude">8.77034</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.2947,8.77034,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.22">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Lomas 3S</SimpleData>
+            <SimpleData name="siteID">LOM_3S</SimpleData>
+            <SimpleData name="longitude">-83.28991</SimpleData>
+            <SimpleData name="latitude">8.7643</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.28991,8.7643,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.23">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Ocelot Trail 1</SimpleData>
+            <SimpleData name="siteID">OCE_1</SimpleData>
+            <SimpleData name="longitude">-83.33003</SimpleData>
+            <SimpleData name="latitude">8.40706</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33003,8.40706,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.24">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Ocelot Trail 2</SimpleData>
+            <SimpleData name="siteID">OCE_2</SimpleData>
+            <SimpleData name="longitude">-83.33003</SimpleData>
+            <SimpleData name="latitude">8.40706</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33003,8.40706,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.25">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Rio Tigre 1</SimpleData>
+            <SimpleData name="siteID">RTI_1</SimpleData>
+            <SimpleData name="longitude">-83.40675</SimpleData>
+            <SimpleData name="latitude">8.51834</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.40675,8.51834,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.26">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Station</SimpleData>
+            <SimpleData name="siteID">STA_1</SimpleData>
+            <SimpleData name="longitude">-83.33836</SimpleData>
+            <SimpleData name="latitude">8.40456</SimpleData>
+            <SimpleData name="operation">video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33836,8.40456,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.27">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Station 1S</SimpleData>
+            <SimpleData name="siteID">STA_2S</SimpleData>
+            <SimpleData name="longitude">-83.34736</SimpleData>
+            <SimpleData name="latitude">8.4086</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.34736,8.4086,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.28">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Station 2S</SimpleData>
+            <SimpleData name="siteID">STA_3S</SimpleData>
+            <SimpleData name="longitude">-83.3405</SimpleData>
+            <SimpleData name="latitude">8.41069</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.3405,8.41069,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.29">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Station 3S</SimpleData>
+            <SimpleData name="siteID">STA_4S</SimpleData>
+            <SimpleData name="longitude">-83.343802</SimpleData>
+            <SimpleData name="latitude">8.42217</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.343802,8.42217,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.30">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Station 4S</SimpleData>
+            <SimpleData name="siteID">STA_5S</SimpleData>
+            <SimpleData name="longitude">-83.323034</SimpleData>
+            <SimpleData name="latitude">8.410447</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.323034,8.410447,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.31">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Station 5S</SimpleData>
+            <SimpleData name="siteID">STA_6S</SimpleData>
+            <SimpleData name="longitude">-83.318923</SimpleData>
+            <SimpleData name="latitude">8.418519</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.318923,8.418519,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.32">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Station 6S</SimpleData>
+            <SimpleData name="siteID">STA_7S</SimpleData>
+            <SimpleData name="longitude">-83.33446</SimpleData>
+            <SimpleData name="latitude">8.42229</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.33446,8.42229,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.33">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Station Ajo</SimpleData>
+            <SimpleData name="siteID">STA_8S</SimpleData>
+            <SimpleData name="longitude">-83.326855</SimpleData>
+            <SimpleData name="latitude">8.408702</SimpleData>
+            <SimpleData name="operation">photo</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.326855,8.408702,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="LTM.34">
+        <ExtendedData>
+          <SchemaData schemaUrl="#LTM.schema">
+            <SimpleData name="locationID">Polini</SimpleData>
+            <SimpleData name="siteID"> Pol1</SimpleData>
+            <SimpleData name="longitude">-83.358521</SimpleData>
+            <SimpleData name="latitude">8.415822</SimpleData>
+            <SimpleData name="operation"> video</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            -83.358521,8.415822,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Document>
+  </Document>
+</kml>

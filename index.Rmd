@@ -14,11 +14,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 # Introduction
 
 Wildlife is one of the programs that Osa Consevation harbours, you can hace a look of the organizacion here: https://osaconservation.org/
@@ -55,34 +50,51 @@ library(stringr)
 
 
 #drive_auth()
-googledrive::drive_auth(path = Sys.getenv("GOOGLE_AUTHENTICATION_CREDENTIALS"))
-data_path <- "data"
-dir.create(data_path) 
+#googledrive::drive_auth(path = Sys.getenv("GOOGLE_AUTHENTICATION_CREDENTIALS"))
+#data_path <- "data"
+#dir.create(data_path) 
+
 #test2
 # For when the trapping effort file is sorted
 # googledrive::drive_auth(path = Sys.getenv("GOOGLE_AUTHENTICATION_CREDENTIALS"))
 
-summary(cars)
 ```
+
+# Piro Restoration Plots
+
+
+# Exploration to Fila Costeña
+
+
+# Campus volunteers cameras
+
+
+# Arboreal Bridges
+
+
+# Farms for Nature
+
 
 # Long Term Monitoring
 
-You can also embed plots, for example:
+*Introduction:* Loren ipsum ...
+
 
 ```{r, c02, include=F, message=F, warning=F, results="hide"}
 
 #Import the shapefiles for the maps
-dir.create("shapefiles")
-shp_folder <- drive_ls(path = as_id("1tIPtT8gXcLRPW26IqH1wOjm9_cjhJG9L"), recursive=T)
 
-drive_download(file = as_id(shp_folder$id[2]), path = paste0("shapefiles/", shp_folder$name[2]), overwrite = TRUE)
+#dir.create("shapefiles")
+#shp_folder <- drive_ls(path = as_id("1tIPtT8gXcLRPW26IqH1wOjm9_cjhJG9L"), recursive=T)
+
+#drive_download(file = as_id(shp_folder$id[2]), path = paste0("shapefiles/", shp_folder$name[2]), overwrite = TRUE)
 
 LTM_Map <- st_read("shapefiles/LongTermMonitoring2026.kml")
 LTM_Map2<- st_zm(LTM_Map, drop = TRUE, what = "ZM")
+
 ```
 
-
-here goes the map
+Here goes the map
 
 ```{r}
 
@@ -101,25 +113,597 @@ leaflet(LTM_Map2) %>%
 
 ```
 
-The following represents the data exploration for the data collected during the collaboration between Osa Conservation for the project entitled:
+The following represents the data exploration for the data collected for the project:
 
-**Main Title.**
+``` {r}
+# Download the Wildlife Insights data and format it
+#WildlifeInsights_folder <- drive_ls(path = as_id("1L-NrbOSaqtxzHrukcuxZAXSg4Ate35iA"), recursive=T)
 
-Also known as:
+#download images
+#drive_download(file = as_id(WildlifeInsights_folder$id[2]), path = WildlifeInsights_folder$name[2], overwrite = TRUE)
 
-**Long term monitoring**
+#Download deployments
+#drive_download(file = as_id(WildlifeInsights_folder$id[5]), path =  WildlifeInsights_folder$name[5], overwrite = TRUE)
 
-sdfjkhsdfl
+img0 <- read.csv("images_2003884.csv", header=T)
+dep0 <- read.csv("deployments.csv", header=T)
 
-# Exploration to Fila Costeña
+#Subset Long Term Monitoring
+dep<-dep0 %>% 
+  filter(subproject_name=="Long Term Monitoring")
 
-
-# Arboreal Bridges
-
-
-
-# Farms for Nature
-
+img <- img0 %>% 
+  filter(deployment_id %in% dep$deployment_id)
 
 
-# Piro Restoration plots
+#
+#Subset Fila Costeña
+#dep<-dep0 %>% 
+#  filter(str_starts(subproject_name, "Fila"))
+
+#img <- img0 %>% 
+#  filter(deployment_id %in% dep$deployment_id)
+
+
+#Subset 
+#dep<-dep0 %>% 
+#  filter(str_starts(subproject_name, "R2R"))
+
+#img <- img0 %>% 
+#  filter(deployment_id %in% dep$deployment_id)
+
+
+
+# Prep the dates 
+
+# start dates
+dep$start_date <- ymd_hms(paste0(substr(dep$start_date,1,10), " 00:00:01"))
+
+# end dates
+dep$end_date   <- ymd_hms(paste0(substr(dep$end_date,1,10), " 23:59:00"))
+
+# camera days
+dep$days <- round(interval(dep$start_date, dep$end_date)/ddays(1),0)
+
+dep$feature_type <- substr(dep$placename,4,4)
+
+# Image dates
+# Image timestamp
+img$timestamp <- ymd_hms(img$timestamp)
+#
+dep <- dep[duplicated(dep[,c("deployment_id", "placename")])==F,]
+img <- left_join(img, dep[,c("deployment_id", "placename")])
+
+
+```
+
+
+To date we have deployed `r nrow(dep)` cameras, at `r length(unique(dep$placename))` locations. Resulting in the capture of `r nrow(img[img$is_blank==0,])` wildlife images of `r length(unique(img$common_name))` species.
+
+
+```{r, cam_dat}
+
+# Create the leaflet map
+m <- leaflet(data = dep) %>%
+  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addProviderTiles(providers$OpenStreetMap, group = "Street Map")  %>%
+  addCircleMarkers(
+    radius = 3, 
+    fillOpacity = 0.8
+  ) %>%
+  addLayersControl(
+    position = "topleft",
+    baseGroups = c("Satellite", "Street Map"),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+
+m
+```
+
+
+Fist take a look of the chronology of the deployments:
+
+```{r}
+# Call the plot
+p <- plot_ly()
+
+# We want a separate row for each 'placename' - so lets turn it into a factor
+dep$placename <- as.factor(dep$placename)
+
+# loop through each place name
+for(i in seq_along(levels(dep$placename)))
+  {
+      #Subset the data to just that placename
+      tmp <- dep[dep$placename==levels(dep$placename)[i],]
+      # Order by date
+      tmp <- tmp[order(tmp$start_date),]
+      # Loop through each deployment at that placename
+      for(j in 1:nrow(tmp))
+      {
+        # Add a line to 'p'
+        p <- add_trace(p, 
+                       #Use the start and end date as x coordinates
+                       x = c(tmp$start_date[j], tmp$end_date[j]), 
+                       #Use the counter for the y coordinates
+                       y = c(i,i), 
+                       # State the type of chart
+                       type="scatter",
+                       # make a line that also has points
+                       mode = "lines+markers", 
+                       # Add the deployment ID as hover text
+                       hovertext=tmp$deployment_id[j], 
+                       # Color it all black
+                       color=I("black"), 
+                       # Suppress the legend
+                       showlegend = FALSE)
+      }
+      
+  }
+# Add a categorical y axis
+ p <- p %>%   
+   layout(yaxis = list(
+      ticktext = as.list(levels(dep$placename)), 
+      tickvals = as.list(1:length(levels(dep$placename))),
+      tickmode = "array"))
+
+p
+
+#Filter down the image data to remove anything not identified to species:
+
+#Camera activity plot
+# Order by placename to make the graphs easier to follow
+dep <- dep[order(dep$placename),]
+
+# Get unique placenames
+placenames_unique <- unique(dep$placename)
+
+#Get a list of unique locations
+locs <- dep[,c("placename", "longitude", "latitude")]
+locs <- locs[duplicated(locs)==F,]
+
+plot_height <- max(400, length(placenames_unique) * 20)
+
+img_sub <- img %>% filter(is_blank==0,                # Remove the blanks
+                          is.na(img$species)==FALSE, # Remove classifications which don't have species 
+                          species!="sapiens",
+                          species!="",
+                          common_name!="No CV Result") 
+
+
+img_subMammal<-img_sub %>% filter(class=="Mammalia")
+
+img_subBird<-img_sub %>% filter(class=="Aves")
+
+```
+
+
+Which results in `r nrow(img_sub)` identifiable wildlife images of `r length(unique(img_sub$common_name))` species. Including `r length(unique(img_subMammal$common_name))` Mammals and `r length(unique(img_subBird$common_name))` Birds
+
+
+```{r}
+# Prep the analysis dataframes
+
+# Remove any deployments without end dates
+tmp <- dep[is.na(dep$end_date)==F,]
+
+# Create an empty list to store our days
+daily_lookup <- list()
+
+# Loop through the deployment dataframe and create a row for every day the camera is active
+for(i in 1:nrow(tmp))
+{
+  if(ymd(substr(tmp$start_date[i],1,10))!=ymd(substr(tmp$end_date[i],1,10)))
+  {
+    daily_lookup[[i]] <- data.frame("date"=seq(ymd(substr(tmp$start_date[i],1,10)), ymd(substr(tmp$end_date[i],1,10)), by="days"), "placename"=tmp$placename[i])
+  }
+}
+
+# Merge the lists into a dataframe
+row_lookup <- bind_rows(daily_lookup)
+
+# Remove duplicates - when start and end days are the same for successive deployments
+row_lookup <- row_lookup[duplicated(row_lookup)==F,]
+
+###################################
+# Create your independent detections
+independent <- 30
+
+img_sub$animal_count <- img_sub$number_of_objects
+img_sub$sp <- paste(img_sub$genus, img_sub$species, sep=".")
+
+# Create your independent data
+
+img_tmp <- img_sub %>%
+              arrange(deployment_id) %>%        # Order by deployment_id
+              group_by(deployment_id, sp) %>%   # Group species together
+              mutate(duration = int_length(timestamp %--% lag(timestamp))) # Calculate the gap bet
+
+# Give a random value to all cells
+img_tmp$event_id <- 9999
+
+# Create a counter
+counter <- 1
+
+# Make a unique code that has one more zero than rows in your dataframe  
+num_code <- as.numeric(paste0(nrow(img_sub),0))
+
+# Loop through img_tmp - if gap is greater than the threshold -> give it a new event ID
+for (i in 2:nrow(img_tmp)) {
+  img_tmp$event_id[i-1]  <- paste0("E", str_pad(counter, nchar(num_code), pad = "0"))
+  
+  if(is.na(img_tmp$duration[i]) | abs(img_tmp$duration[i]) > (independent * 60))
+    {
+      counter <- counter + 1
+    }
+}
+
+# Update the information for the last row - the loop above always updates the previous row... leaving the last row unchanged
+   
+ # group ID  for the last row
+ if(img_tmp$duration[nrow(img_tmp)] < (independent * 60)|
+    is.na(img_tmp$duration[nrow(img_tmp)])){
+   img_tmp$event_id[nrow(img_tmp)] <- img_tmp$event_id[nrow(img_tmp)-1]
+ } else{
+   counter <- counter + 1
+   img_tmp$event_id[nrow(img_tmp)] <- paste0("E", str_pad(counter, nchar(num_code), pad = "0"))
+ }
+
+# remove the duration column
+img_tmp$duration <- NULL
+ 
+ # find out the last and the first of the time in the group
+  top <- img_tmp %>% group_by(event_id) %>% top_n(1,timestamp) %>% dplyr::select(event_id, timestamp)
+  bot <- img_tmp %>% group_by(event_id) %>% top_n(-1,timestamp) %>% dplyr::select(event_id, timestamp)
+  names(bot)[2] <- c("timestamp_end")
+  
+  img_num <- img_tmp %>% group_by(event_id) %>% summarise(event_observations=n()) # number of images in the event
+  event_grp <- img_tmp %>% group_by(event_id) %>% summarise(event_groupsize=max(animal_count))
+
+  # calculate the duration and add the other elements
+  diff <-  top %>% left_join(bot, by="event_id") %>%
+      mutate(event_duration=abs(int_length(timestamp %--% timestamp_end))) %>%
+      left_join(event_grp, by="event_id")%>%
+      left_join(img_num, by="event_id")
+
+  # Remove columns you don't need
+  diff$timestamp   <-NULL
+  diff$timestamp_end <-NULL
+  diff <- diff[duplicated(diff)==F,]
+    # Merge the img_tmp with the event data
+  img_tmp <- 
+   left_join(img_tmp,diff,by="event_id")
+  
+  
+  # Remove duplicates
+ind_dat <- img_tmp[duplicated(img_tmp$event_id)==F,]
+
+# Make a  unique code for ever day and deployment where cameras were functioning
+tmp <- paste(row_lookup$date, row_lookup$placename)
+
+#Subset ind_dat to data that matches the unique codes
+ind_dat <- ind_dat[paste(substr(ind_dat$timestamp,1,10), ind_dat$placename) %in% tmp, ]
+
+# Convert your species names to factors
+ind_dat$sp <- as.factor(ind_dat$sp)
+
+#Subset the columns
+tmp <- dep[, c("project_id", "placename", "longitude", "latitude", "feature_type")]
+
+# Remove duplicated rows
+tmp<- tmp[duplicated(tmp)==F,]
+
+
+# Total counts
+  # Station / Month / deport / Species      
+  tmp <- row_lookup
+  
+  # Calculate the number of days at each site  
+  total_obs <- tmp %>% 
+      group_by(placename) %>%
+      summarise(days = n())
+  
+  # Convert to a data frame
+  total_obs <- as.data.frame(total_obs)
+  
+  # Add columns for each species  
+  total_obs[, levels(ind_dat$sp)] <- NA
+  # Duplicate for counts
+  total_count <- total_obs
+  # Test counter
+  i <-1
+  # For each station, count the number of individuals/observations
+  for(i in 1:nrow(total_obs))
+    {
+      tmp <- ind_dat[ind_dat$placename==total_obs$placename[i],]
+      
+      tmp_stats <- tmp %>%  group_by(sp, .drop=F) %>% summarise(obs=n(), count=sum(animal_count))
+      
+      total_obs[i,as.character(tmp_stats$sp)] <- tmp_stats$obs
+      total_count[i,as.character(tmp_stats$sp)] <- tmp_stats$count
+    }
+
+# add simple treatment to the total_count dataframe
+total_count$plot_id <- substr(total_count$placename,4,6)  
+#total_count <- left_join(total_count, dep$plot_id[, c("plot_id", #"simple_treatment")])  
+  
+```
+
+This resulted in `r nrow(ind_dat)` independent detections of wildlife. The total number of detections and proportion of cameras detected at are as follows:
+
+```{r}
+# Make a species list
+# First define vector of the headings you want to see (we will use this trick a lot later on)
+taxonomy_headings <- c("class", "order", "family", "genus", "species", "common_name")
+
+# Subset the image data to just those columns
+tmp<- ind_dat[,colnames(ind_dat)%in% taxonomy_headings]
+# Remove duplicates
+tmp <- tmp[duplicated(tmp)==F,]
+
+# Create an ordered species list
+sp_summary  <- tmp[order(tmp$class, tmp$order, tmp$family, tmp$genus, tmp$species),]
+sp_summary$sp <- paste(sp_summary$genus, sp_summary$species, sep=".")
+
+# Convert to long
+long_obs <- total_obs %>% 
+  pivot_longer(cols=sp_summary$sp,  # The columns we want to create into rows - species
+               names_to="sp",       # What we what the number column to be called
+               values_to = "count") # Takes the values in the species columns and calls them `count`
+
+# We can them summaries those using dplyr
+tmp <- long_obs %>%                   # Take the long observation data frame `long_obs` 
+          group_by(sp) %>%            # Group by species
+          summarise(count=sum(count)) # Sum all the independent observations
+
+# Add it to the sp_summary dataframe
+sp_summary <- left_join(sp_summary, tmp)
+
+## Occupancy
+# We use the mutate function to mutate the column
+total_binary <-  total_obs %>%    # The total obs dataframe              
+                    mutate(across(sp_summary$sp, ~+as.logical(.x)))  # across all of the species columns, make it binary
+
+# Flip the dataframe to longer - as before
+long_bin <- total_binary %>% 
+  pivot_longer(cols=sp_summary$sp, names_to="sp", values_to = "count") # Takes the species names columns, and makes them unique rows with "sp" as the key 
+
+# We can now sum the presence/absences and divide by the number of survey locations
+tmp <- long_bin %>% 
+  group_by(sp) %>% 
+  summarise(occupancy=sum(count)/nrow(locs)) # divided the sum by the number of sites
+
+# add the results to the sp_summary
+sp_summary <- left_join(sp_summary, tmp)
+
+
+###########################
+# Comparison plot
+# Lets put the dataframes in a sensible order
+sp_summary <- sp_summary[order(sp_summary$count),]
+
+yform <- list(categoryorder = "array",
+              categoryarray = sp_summary$sp)
+
+xform <- list(title="Independent detections")
+
+# Capture rate
+fig1 <- plot_ly(x = sp_summary$count, y = sp_summary$common_name, type = 'bar', orientation = 'h', showlegend=F) %>% 
+ layout(yaxis = yform, xaxis=xform)
+
+yform <- list(categoryorder = "array",
+              categoryarray = sp_summary$sp,
+              showticklabels=F)
+xform <- list(title="Occupancy")
+
+
+# Occupancy
+fig2 <- plot_ly(x = sp_summary$occupancy, y = sp_summary$common_name, type = 'bar', orientation = 'h', showlegend=F) %>% 
+ layout(yaxis = yform, xaxis=xform)
+
+subplot(nrows=1,fig1, fig2, titleX = T) # We could stack them on top of one another using nrows=2
+```
+
+For the top twenty detected species, the treatment-specific capture rates are as follows:
+
+```{r}
+# Get species columns (everything except placename, days, plot_id, simple_treatment)
+species_cols <- colnames(total_count)[!colnames(total_count) %in% c("placename", "days", "plot_id", "simple_treatment")]
+
+# Pivot to long format
+cam_long <- total_count %>%
+  pivot_longer(cols = all_of(species_cols), 
+               names_to = "species", 
+               values_to = "count")
+
+# Calculate capture rate per 100 days by species and treatment
+capture_rates <- cam_long %>%
+  group_by(species) %>%
+  summarise(
+    total_captures = sum(count, na.rm = TRUE),
+    total_days = sum(days, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(capture_rate = (total_captures / total_days) * 100)
+
+# Get top 20 species overall
+top_20_species <- capture_rates %>%
+  group_by(species) %>%
+  summarise(total = sum(total_captures)) %>%
+  arrange(desc(total)) %>%
+  slice_head(n = 20) %>%
+  pull(species)
+
+# Get species order based on forest capture rate
+#forest_order <- capture_rates %>%
+#  filter(species %in% top_20_species, simple_treatment == "forest") %>%
+#  arrange(desc(capture_rate)) %>%
+#  pull(species)
+
+# Add any species not detected in forest to the end
+#forest_order <- c(forest_order, setdiff(top_20_species, forest_order))
+
+# Swap species names with common names 
+lookup <- img_sub[, c("sp", "common_name")]
+lookup <- lookup[duplicated(lookup) == FALSE, ]
+
+# Create common_name order based on forest_order
+#common_name_order <- lookup$common_name[match(forest_order, lookup$sp)]
+
+# Filter to top 20 and set factor levels
+plot_data <- capture_rates %>%
+  filter(species %in% top_20_species) %>%
+  left_join(lookup, by = c("species" = "sp")) %>%
+  mutate(
+    species = factor(species),
+    common_name = factor(common_name),
+    #simple_treatment = factor(simple_treatment, 
+    #                           levels = c("forest", "active_restoration", #"passive_restoration")),
+    capture_rate_log = capture_rate + 0.01,
+    text_color = ifelse(capture_rate < 5, "white", "black")
+  )
+
+# Create the heatmap with log scale
+ggplot(plot_data, aes(x=1, y = common_name, fill = capture_rate_log)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = round(capture_rate, 1), color = text_color), size = 3) +
+  scale_fill_viridis_c(option = "plasma", 
+                       trans = "log10",
+                       breaks = c(0.1, 1, 10, 100),
+                       labels = c("0.1", "1", "10", "100"),
+                       name = "Captures\nper 100 days") +
+  scale_color_identity() +
+  labs(
+    y = "",
+    title = "Top 20 species capture rates"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+    axis.text.y = element_text(size = 10),
+    axis.title.x = element_text(size = 14),
+    plot.title = element_text(size = 16)
+  )
+```
+
+## Spatial plot of capture rates
+
+The overall capture rate by camera trap location. 
+
+```{r}
+ total_obs <- left_join(total_obs, locs)
+ sp_list <- sp_summary$sp     
+      # Calculate overall capture rate (sum of all species)
+      overall_cr <- total_obs %>% 
+        mutate(
+          total_detections = rowSums(select(., all_of(sp_list)), na.rm = TRUE),
+          CaptureRate = total_detections / (days / 100)
+        )
+      
+      # Calculate min and max for legend
+      max_cr <- max(overall_cr$CaptureRate, na.rm = TRUE)
+      min_cr <- min(overall_cr$CaptureRate, na.rm = TRUE)
+      mid_cr <- min_cr + ((max_cr - min_cr)/2)
+      
+      # Create custom HTML legend
+      legend_html <- paste0(
+        '<div style="padding: 10px; background: white; border: 2px solid grey; border-radius: 5px;">',
+        '<strong>All Species</strong><br>',
+        '<strong>Capture Rate</strong><br>(per 100 days)<br><br>',
+        '<svg width="120" height="80">',
+        '<circle cx="15" cy="15" r="11" fill="rgba(0, 102, 204, 0.6)" />',
+        '<text x="35" y="20" font-size="12">High: ', round(max_cr, 2), '</text>',
+        '<circle cx="15" cy="40" r="7" fill="rgba(0, 102, 204, 0.6)" />',
+        '<text x="35" y="45" font-size="12">Med: ', round(mid_cr, 2), '</text>',
+        '<circle cx="15" cy="65" r="3" fill="rgba(0, 102, 204, 0.6)" />',
+        '<text x="35" y="70" font-size="12">Low: ', round(min_cr, 2), '</text>',
+        '</svg>',
+        '</div>'
+      )
+      
+      leaflet() %>%
+        addProviderTiles(providers$Esri.WorldImagery) %>%
+        addCircleMarkers(
+          data = overall_cr,
+          lng = ~longitude,
+          lat = ~latitude,
+          radius = ~(CaptureRate / max(CaptureRate, na.rm = TRUE) * 10) + 1,
+          color = "#FF00E1",
+          stroke = FALSE,
+          fillOpacity = 0.8,
+          popup = ~paste(placename, "<br>Total Detections:", total_detections, 
+                         "<br>Capture Rate:", round(CaptureRate, 2))
+        ) %>%   
+        addScaleBar(position = "topleft") %>%
+        addControl(html = legend_html, position = "bottomright")
+    
+```
+
+Now the distribution per species
+
+
+
+```{r}
+
+img_subMammal<-img_sub %>% filter(class=="Mammalia")
+Mammalspp<-unique(img_subMammal$sp)
+
+img_subBird<-img_sub %>% filter(class=="Aves")
+
+#################################################################
+
+overall_cr_mammals <- overall_cr %>%
+  select(placename, days, longitude, latitude, total_detections, CaptureRate, all_of(Mammalspp))
+
+# Calculate capture rate for each species
+for(species in Mammalspp) {
+  overall_cr_mammals[[paste0(species, "_CR")]] <- 
+    (overall_cr_mammals[[species]] / overall_cr_mammals$days) * 100
+}
+
+#################################################################
+library(leaflet)
+library(leaflet.extras)
+
+map <- leaflet() %>%
+  addProviderTiles(providers$Esri.WorldImagery) %>%
+  addScaleBar(position = "topleft")
+
+# Add individual species layers
+for(i in 1:length(Mammalspp)) {
+  cr_col <- paste0(Mammalspp[i], "_CR")
+  species_cr_mammals <- overall_cr_mammals %>% 
+    filter(get(cr_col) > 0)
+    
+  # Skip species with all zeros
+  map <- map %>%
+    addCircleMarkers(
+      data = species_cr_mammals,
+      lng = ~longitude,
+      lat = ~latitude,
+      radius = ~(get(cr_col) / max(get(cr_col), na.rm = TRUE) * 10) + 1,
+      color = "lightyellow",
+      stroke = FALSE,
+      fillOpacity = 0.7,
+      popup = ~paste(placename, "<br>", Mammalspp[i], ": ", round(get(cr_col), 2), 
+                     " detections/100 days<br>Total detections:", get(Mammalspp[i])),
+      group = Mammalspp[i],
+      label = ~paste(Mammalspp[i], "-", round(get(cr_col), 2))
+    )
+}
+
+# Add layer control
+map <- map %>%
+  addLayersControl(
+    overlayGroups = c(Mammalspp[Mammalspp %in% names(overall_cr_mammals)]),
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  hideGroup(species_cols)  # Start with all species hidden, only show "All Mammals"
+
+map
+
+
+    
+```
+
+
+
