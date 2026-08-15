@@ -520,24 +520,34 @@ iucn_all <- left_join(iucn, sp_all)
 
 iucn_all$IUCN_status[iucn_all$IUCN_status=="Not assessed"] <- "Not Assessed"
 
-#Order
-iucn_all <- iucn_all[order(iucn_all$class_name, iucn_all$IUCN_status, iucn_all$Endemism, iucn_all$scientific_name),]
-
-
-iucn_all<-iucn_all   %>%
-  filter(!is.na(IUCN_status))
 
 # Define IUCN colors including Not Assessed
 iucn_colors <- c(
-  "Least Concern" = "#90EE90",
-  "Near Threatened" = "#FFA500",
-  "Vulnerable" = "#FFFF00",
-  "Endangered" = "#FF6B6B",
   "Critically Endangered" = "#8B0000",
+  "Endangered" = "#FF6B6B",
+  "Vulnerable" = "#FFA500",
+  "Near Threatened" = "#FFFF00",
+  "Least Concern" = "#90EE90",
   "Data Deficient" = "#999999",
   "Not Assessed" = "#EEEEEE",
   "Unknown" = "#FFFFFF"
 )
+
+iucn_all$IUCN_status <- factor(iucn_all$IUCN_status, 
+                               levels = names(iucn_colors))
+
+# Now order by IUCN_status (which follows the factor levels), then by other columns
+iucn_all <- iucn_all[order(iucn_all$class_name, 
+                           iucn_all$IUCN_status,  # This will follow iucn_colors order
+                           iucn_all$Endemism, 
+                           iucn_all$scientific_name),]
+
+iucn_all<-iucn_all   %>%
+  filter(!is.na(IUCN_status))
+
+#back status to character
+iucn_all$IUCN_status <- as.character(iucn_all$IUCN_status)
+
 ############### WAFFLE PLOT
 
 # Prepare data with grid positions
@@ -546,8 +556,8 @@ waffle_hover <- iucn_all %>%
   group_by(class_name) %>%
   mutate(
     # Create grid within each class
-    row_num = (row_number() - 1) %/% 15 + 1,
-    col_num = (row_number() - 1) %% 15 + 1,
+    row_num = (row_number() - 1) %/% 10 + 1,
+    col_num = (row_number() - 1) %% 10 + 1,
     # Create hover text
     hover_text = paste(
       "Species:", scientific_name,
