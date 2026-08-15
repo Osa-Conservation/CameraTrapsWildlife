@@ -481,8 +481,114 @@ OccuSummary <- long_bin %>%
   summarise(occupancy=sum(count)/nrow(locs)) # divided the sum by the number of sites
 
 # add the results to the sp_summary
-sp_summary <- left_join(sp_summary0, OccuSummary)
 
+
+```
+
+
+How is the distribution of Threatened species in our records?
+
+```{r}
+
+#drive_download(file = as_id("1MtXa2adHajT0hOuPNKd0JE2L-Qrp_U3T"), path = paste0("data/", "species_lists.xlsx"), overwrite = TRUE)
+
+sp_mam <- read_excel("data/species_lists.xlsx", sheet="mammals_list") 
+#sp_amp <- read_excel("data/species_lists.xlsx", sheet="amphibians_list") 
+sp_bir <- read_excel("data/species_lists.xlsx", sheet="bird_list") 
+
+# Merge the list
+
+sp_all <- bind_rows(sp_mam[,c("scientific_name", "Endemism", "IUCN_status", "IUCN_population_trend", "class_name")],
+#sp_amp[,c("scientific_name", "Endemism", "IUCN_status", "IUCN_population_trend", "class_name")],
+sp_bir[,c("scientific_name", "Endemism", "IUCN_status", "IUCN_population_trend", "class_name")])
+
+# Remove duplicates 
+sp_all <- sp_all[duplicated(sp_all)==F,]
+
+
+# Merge the species recorded on surveys
+all_caps <- gsub("\\.", " ", sp_summary$sp)
+iucn <- data.frame("scientific_name"=unlist(all_caps))
+
+# Remove duplicated
+iucn$tmp <- 1
+iucn <- iucn[duplicated(iucn$scientific_name)==F,]
+iucn$tmp <- NULL
+iucn_all <- left_join(iucn, sp_all)
+
+iucn_all$IUCN_status[iucn_all$IUCN_status=="Not assessed"] <- "Not Assessed"
+
+#Order
+iucn_all <- iucn_all[order(iucn_all$class_name, iucn_all$IUCN_status, iucn_all$Endemism, iucn_all$scientific_name),]
+
+
+iucn_all<-iucn_all   %>%
+  filter(!is.na(IUCN_status))
+
+# Define IUCN colors including Not Assessed
+iucn_colors <- c(
+  "Least Concern" = "#90EE90",
+  "Near Threatened" = "#FFA500",
+  "Vulnerable" = "#FFFF00",
+  "Endangered" = "#FF6B6B",
+  "Critically Endangered" = "#8B0000",
+  "Data Deficient" = "#999999",
+  "Not Assessed" = "#EEEEEE",
+  "Unknown" = "#FFFFFF"
+)
+############### WAFFLE PLOT
+
+# Prepare data with grid positions
+waffle_hover <- iucn_all %>%
+  mutate(IUCN_status = ifelse(is.na(IUCN_status), "Not Assessed", IUCN_status)) %>%
+  group_by(class_name) %>%
+  mutate(
+    # Create grid within each class
+    row_num = (row_number() - 1) %/% 15 + 1,
+    col_num = (row_number() - 1) %% 15 + 1,
+    # Create hover text
+    hover_text = paste(
+      "Species:", scientific_name,
+      "<br>Endemism:", Endemism,
+      "<br>Population Trend:", IUCN_population_trend,
+      "<br>IUCN Status:", IUCN_status
+    )
+  ) %>%
+  ungroup()
+
+# Create static ggplot
+p <- ggplot(waffle_hover, aes(x = col_num, y = row_num, fill = IUCN_status, text = hover_text)) +
+  geom_tile(color = "white", linewidth = 0.3) +
+  facet_wrap(~class_name, scales = "fixed", ncol = 1) +
+  scale_fill_manual(values = iucn_colors, name = "IUCN Status") +
+  coord_equal() +
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    strip.text = element_text(face = "bold", size = 12),
+    legend.position = "bottom"
+  ) +
+  labs(
+    title = "IUCN Status Distribution by Class",
+    subtitle = "Each square represents one species. Hover for details."
+  )
+
+# Convert to interactive plotly
+ggplotly(p, tooltip = "text") %>%
+  layout(
+    hoverlabel = list(bgcolor = "white", font = list(size = 11)),
+    legend = list(orientation = "h", y = -0.1)
+  )
+
+
+```
+
+
+Check the number of records and the occupancy
+
+```{r}
 
 ###########################
 # Comparison plot
