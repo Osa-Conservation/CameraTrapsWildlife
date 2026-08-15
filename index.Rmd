@@ -126,8 +126,8 @@ The following represents the data exploration for the data collected for the pro
 #Download deployments
 #drive_download(file = as_id(WildlifeInsights_folder$id[5]), path =  WildlifeInsights_folder$name[5], overwrite = TRUE)
 
-img0 <- read.csv("images_2003884.csv", header=T)
-dep0 <- read.csv("deployments.csv", header=T)
+img0 <- read.csv("data/images_2003884.csv", header=T)
+dep0 <- read.csv("data/deployments.csv", header=T)
 
 #Subset Long Term Monitoring
 dep<-dep0 %>% 
