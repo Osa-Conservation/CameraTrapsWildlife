@@ -286,20 +286,20 @@ Now, we goint to check the results bases od independent records:
 # Prep the analysis dataframes
 
 # Remove any deployments without end dates
-tmp <- dep[is.na(dep$end_date)==F,]
+depEnds <- dep[is.na(dep$end_date)==F,] #formerly tmp
 
 # Create an empty list to store our days
 daily_lookup <- list()
 
 # Loop through the deployment dataframe and create a row for every day the camera is active
-for(i in 1:nrow(tmp))
+for(i in 1:nrow(depEnds))
 {
-  if(ymd(substr(tmp$start_date[i],1,10))!=ymd(substr(tmp$end_date[i],1,10)))
+  if(ymd(substr(depEnds$start_date[i],1,10))!=ymd(substr(depEnds$end_date[i],1,10)))
   {
     daily_lookup[[i]] <- data.frame(
-      "date"=seq(ymd(substr(tmp$start_date[i],1,10)),
-                 ymd(substr(tmp$end_date[i],1,10)), by="days"),
-      "placename"=tmp$placename[i])
+      "date"=seq(ymd(substr(depEnds$start_date[i],1,10)),
+                 ymd(substr(depEnds$end_date[i],1,10)), by="days"),
+      "placename"=depEnds$placename[i])
   }
 }
 
@@ -401,7 +401,7 @@ ind_dat$sp <- as.factor(ind_dat$sp)
 dep_sites <- dep[, c("placename", "longitude", "latitude")] # formerly tmp
 
 # Remove duplicated rows
-dep_short<- dep_short[duplicated(dep_short)==F,]
+dep_sites<- dep_sites[duplicated(dep_sites)==F,]
 
 # Total counts
   # Station / Month / deport / Species      
@@ -454,12 +454,12 @@ sp_summary0  <- ind_tax[order(ind_tax$class, ind_tax$order, ind_tax$family, ind_
 
 # Convert to long
 long_obs <- total_obs %>% 
-  pivot_longer(cols=sp_summary$sp,  # The columns we want to create into rows - species
+  pivot_longer(cols=sp_summary0$sp,  # The columns we want to create into rows - species
                names_to="sp",       # What we what the number column to be called
                values_to = "count") # Takes the values in the species columns and calls them `count`
 
 # We can them summaries those using dplyr
-sppSummary0 <- long_obs %>%                   # Take the long observation data frame `long_obs` 
+sppSummary <- long_obs %>%                   # Take the long observation data frame `long_obs` 
           group_by(sp) %>%            # Group by species
           summarise(count=sum(count)) # Sum all the independent observations
 
@@ -469,11 +469,11 @@ sp_summary0 <- left_join(sp_summary0, sppSummary)
 ## Occupancy
 # We use the mutate function to mutate the column
 total_binary <-  total_obs %>%    # The total obs dataframe              
-                    mutate(across(sp_summary$sp, ~+as.logical(.x)))  # across all of the species columns, make it binary
+                    mutate(across(sp_summary0$sp, ~+as.logical(.x)))  # across all of the species columns, make it binary
 
 # Flip the dataframe to longer - as before
 long_bin <- total_binary %>% 
-  pivot_longer(cols=sp_summary$sp, names_to="sp", values_to = "count") # Takes the species names columns, and makes them unique rows with "sp" as the key 
+  pivot_longer(cols=sp_summary0$sp, names_to="sp", values_to = "count") # Takes the species names columns, and makes them unique rows with "sp" as the key 
 
 # We can now sum the presence/absences and divide by the number of survey locations
 OccuSummary <- long_bin %>% 
@@ -481,7 +481,7 @@ OccuSummary <- long_bin %>%
   summarise(occupancy=sum(count)/nrow(locs)) # divided the sum by the number of sites
 
 # add the results to the sp_summary
-sp_summary <- left_join(sp_summary, OccuSummary)
+sp_summary <- left_join(sp_summary0, OccuSummary)
 
 
 ###########################
