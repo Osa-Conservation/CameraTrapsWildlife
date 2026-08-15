@@ -28,6 +28,7 @@ jobs:
             "rmarkdown",
             "tidyverse",
             "leaflet",
+            "leaflet.extras",
             "DT",
             "ggplot2",
             "knitr",

@@ -34,6 +34,7 @@ knitr::opts_chunk$set(echo = FALSE, message=F, warning=F)
 library(dplyr)
 library(tidyr)
 library(leaflet)
+library(leaflet.extras)
 library(units)
 library(sf)
 library(viridis)
@@ -135,7 +136,6 @@ dep<-dep0 %>%
 img <- img0 %>% 
   filter(deployment_id %in% dep$deployment_id)
 
-
 #
 #Subset Fila Costeña
 #dep<-dep0 %>% 
@@ -164,8 +164,7 @@ dep$end_date   <- ymd_hms(paste0(substr(dep$end_date,1,10), " 23:59:00"))
 
 # camera days
 dep$days <- round(interval(dep$start_date, dep$end_date)/ddays(1),0)
-
-dep$feature_type <- substr(dep$placename,4,4)
+#dep$feature_type <- substr(dep$placename,4,4)
 
 # Image dates
 # Image timestamp
@@ -173,7 +172,6 @@ img$timestamp <- ymd_hms(img$timestamp)
 #
 dep <- dep[duplicated(dep[,c("deployment_id", "placename")])==F,]
 img <- left_join(img, dep[,c("deployment_id", "placename")])
-
 
 ```
 
@@ -184,7 +182,7 @@ To date we have deployed `r nrow(dep)` cameras, at `r length(unique(dep$placenam
 ```{r, cam_dat}
 
 # Create the leaflet map
-m <- leaflet(data = dep) %>%
+LocationsMap <- leaflet(data = dep) %>%
   addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
   addProviderTiles(providers$OpenStreetMap, group = "Street Map")  %>%
   addCircleMarkers(
@@ -197,7 +195,8 @@ m <- leaflet(data = dep) %>%
     options = layersControlOptions(collapsed = FALSE)
   )
 
-m
+LocationsMap
+
 ```
 
 
@@ -205,7 +204,7 @@ Fist take a look of the chronology of the deployments:
 
 ```{r}
 # Call the plot
-p <- plot_ly()
+ChronoPlot <- plot_ly()
 
 # We want a separate row for each 'placename' - so lets turn it into a factor
 dep$placename <- as.factor(dep$placename)
@@ -221,7 +220,7 @@ for(i in seq_along(levels(dep$placename)))
       for(j in 1:nrow(tmp))
       {
         # Add a line to 'p'
-        p <- add_trace(p, 
+        ChronoPlot <- add_trace(ChronoPlot, 
                        #Use the start and end date as x coordinates
                        x = c(tmp$start_date[j], tmp$end_date[j]), 
                        #Use the counter for the y coordinates
@@ -240,13 +239,13 @@ for(i in seq_along(levels(dep$placename)))
       
   }
 # Add a categorical y axis
- p <- p %>%   
+ ChronoPlot <- ChronoPlot %>%   
    layout(yaxis = list(
       ticktext = as.list(levels(dep$placename)), 
       tickvals = as.list(1:length(levels(dep$placename))),
       tickmode = "array"))
 
-p
+ChronoPlot
 
 #Filter down the image data to remove anything not identified to species:
 
@@ -263,12 +262,13 @@ locs <- locs[duplicated(locs)==F,]
 
 plot_height <- max(400, length(placenames_unique) * 20)
 
+
+#Filter down the image data to remove anything not identified to species:
 img_sub <- img %>% filter(is_blank==0,                # Remove the blanks
                           is.na(img$species)==FALSE, # Remove classifications which don't have species 
                           species!="sapiens",
                           species!="",
                           common_name!="No CV Result") 
-
 
 img_subMammal<-img_sub %>% filter(class=="Mammalia")
 
@@ -277,7 +277,9 @@ img_subBird<-img_sub %>% filter(class=="Aves")
 ```
 
 
-Which results in `r nrow(img_sub)` identifiable wildlife images of `r length(unique(img_sub$common_name))` species. Including `r length(unique(img_subMammal$common_name))` Mammals and `r length(unique(img_subBird$common_name))` Birds
+Which results in `r nrow(img_sub)` identifiable wildlife images of `r length(unique(img_sub$common_name))` species. Including `r length(unique(img_subMammal$common_name))` Mammals and `r length(unique(img_subBird$common_name))` Birds.
+
+Now, we goint to check the results bases od independent records:
 
 
 ```{r}
@@ -294,7 +296,10 @@ for(i in 1:nrow(tmp))
 {
   if(ymd(substr(tmp$start_date[i],1,10))!=ymd(substr(tmp$end_date[i],1,10)))
   {
-    daily_lookup[[i]] <- data.frame("date"=seq(ymd(substr(tmp$start_date[i],1,10)), ymd(substr(tmp$end_date[i],1,10)), by="days"), "placename"=tmp$placename[i])
+    daily_lookup[[i]] <- data.frame(
+      "date"=seq(ymd(substr(tmp$start_date[i],1,10)),
+                 ymd(substr(tmp$end_date[i],1,10)), by="days"),
+      "placename"=tmp$placename[i])
   }
 }
 
@@ -356,49 +361,52 @@ img_tmp$duration <- NULL
   bot <- img_tmp %>% group_by(event_id) %>% top_n(-1,timestamp) %>% dplyr::select(event_id, timestamp)
   names(bot)[2] <- c("timestamp_end")
   
-  img_num <- img_tmp %>% group_by(event_id) %>% summarise(event_observations=n()) # number of images in the event
-  event_grp <- img_tmp %>% group_by(event_id) %>% summarise(event_groupsize=max(animal_count))
+  img_num <- img_tmp %>% 
+    group_by(event_id) %>% 
+    summarise(event_observations=n()) # number of images in the event
+  
+  event_grp <- img_tmp %>% 
+    group_by(event_id) %>% 
+    summarise(event_groupsize=max(animal_count))
 
   # calculate the duration and add the other elements
-  diff <-  top %>% left_join(bot, by="event_id") %>%
-      mutate(event_duration=abs(int_length(timestamp %--% timestamp_end))) %>%
-      left_join(event_grp, by="event_id")%>%
-      left_join(img_num, by="event_id")
+  diff <-  top %>% 
+    left_join(bot, by="event_id") %>%
+    mutate(event_duration=abs(int_length(timestamp %--% timestamp_end))) %>%
+    left_join(event_grp, by="event_id")%>%
+    left_join(img_num, by="event_id")
 
   # Remove columns you don't need
   diff$timestamp   <-NULL
   diff$timestamp_end <-NULL
   diff <- diff[duplicated(diff)==F,]
     # Merge the img_tmp with the event data
-  img_tmp <- 
-   left_join(img_tmp,diff,by="event_id")
+  img_tmp <- left_join(img_tmp,diff,by="event_id")
   
   
-  # Remove duplicates
-ind_dat <- img_tmp[duplicated(img_tmp$event_id)==F,]
+# Remove duplicates
+ind_dat <- img_tmp %>% distinct(event_id, .keep_all = TRUE)
 
 # Make a  unique code for ever day and deployment where cameras were functioning
-tmp <- paste(row_lookup$date, row_lookup$placename)
+
+#UniqueDayCode <- paste(row_lookup$date, row_lookup$placename) #previously tmp
 
 #Subset ind_dat to data that matches the unique codes
-ind_dat <- ind_dat[paste(substr(ind_dat$timestamp,1,10), ind_dat$placename) %in% tmp, ]
+#ind_dat2 <- ind_dat[paste(substr(ind_dat$timestamp,1,10), ind_dat$placename) %in% UniqueDayCode, ] #formerly ind_dat
 
 # Convert your species names to factors
 ind_dat$sp <- as.factor(ind_dat$sp)
 
 #Subset the columns
-tmp <- dep[, c("project_id", "placename", "longitude", "latitude", "feature_type")]
+dep_sites <- dep[, c("placename", "longitude", "latitude")] # formerly tmp
 
 # Remove duplicated rows
-tmp<- tmp[duplicated(tmp)==F,]
-
+dep_short<- dep_short[duplicated(dep_short)==F,]
 
 # Total counts
   # Station / Month / deport / Species      
-  tmp <- row_lookup
-  
   # Calculate the number of days at each site  
-  total_obs <- tmp %>% 
+  total_obs <- row_lookup %>% 
       group_by(placename) %>%
       summarise(days = n())
   
@@ -407,6 +415,7 @@ tmp<- tmp[duplicated(tmp)==F,]
   
   # Add columns for each species  
   total_obs[, levels(ind_dat$sp)] <- NA
+  
   # Duplicate for counts
   total_count <- total_obs
   # Test counter
@@ -414,9 +423,9 @@ tmp<- tmp[duplicated(tmp)==F,]
   # For each station, count the number of individuals/observations
   for(i in 1:nrow(total_obs))
     {
-      tmp <- ind_dat[ind_dat$placename==total_obs$placename[i],]
+      dep_sites <- ind_dat[ind_dat$placename==total_obs$placename[i],]
       
-      tmp_stats <- tmp %>%  group_by(sp, .drop=F) %>% summarise(obs=n(), count=sum(animal_count))
+      tmp_stats <- dep_sites %>%  group_by(sp, .drop=F) %>% summarise(obs=n(), count=sum(animal_count))
       
       total_obs[i,as.character(tmp_stats$sp)] <- tmp_stats$obs
       total_count[i,as.character(tmp_stats$sp)] <- tmp_stats$count
@@ -433,16 +442,15 @@ This resulted in `r nrow(ind_dat)` independent detections of wildlife. The total
 ```{r}
 # Make a species list
 # First define vector of the headings you want to see (we will use this trick a lot later on)
-taxonomy_headings <- c("class", "order", "family", "genus", "species", "common_name")
+taxonomy_headings <- c("class", "order", "family", "genus", "species", "sp", "common_name")
 
 # Subset the image data to just those columns
-tmp<- ind_dat[,colnames(ind_dat)%in% taxonomy_headings]
+ind_tax<- ind_dat[,colnames(ind_dat)%in% taxonomy_headings] #previously tmp
 # Remove duplicates
-tmp <- tmp[duplicated(tmp)==F,]
+ind_tax <- ind_tax[duplicated(ind_tax)==F,]
 
 # Create an ordered species list
-sp_summary  <- tmp[order(tmp$class, tmp$order, tmp$family, tmp$genus, tmp$species),]
-sp_summary$sp <- paste(sp_summary$genus, sp_summary$species, sep=".")
+sp_summary0  <- ind_tax[order(ind_tax$class, ind_tax$order, ind_tax$family, ind_tax$genus, ind_tax$sp, ind_tax$species),]
 
 # Convert to long
 long_obs <- total_obs %>% 
@@ -451,12 +459,12 @@ long_obs <- total_obs %>%
                values_to = "count") # Takes the values in the species columns and calls them `count`
 
 # We can them summaries those using dplyr
-tmp <- long_obs %>%                   # Take the long observation data frame `long_obs` 
+sppSummary0 <- long_obs %>%                   # Take the long observation data frame `long_obs` 
           group_by(sp) %>%            # Group by species
           summarise(count=sum(count)) # Sum all the independent observations
 
 # Add it to the sp_summary dataframe
-sp_summary <- left_join(sp_summary, tmp)
+sp_summary0 <- left_join(sp_summary0, sppSummary)
 
 ## Occupancy
 # We use the mutate function to mutate the column
@@ -468,12 +476,12 @@ long_bin <- total_binary %>%
   pivot_longer(cols=sp_summary$sp, names_to="sp", values_to = "count") # Takes the species names columns, and makes them unique rows with "sp" as the key 
 
 # We can now sum the presence/absences and divide by the number of survey locations
-tmp <- long_bin %>% 
+OccuSummary <- long_bin %>% 
   group_by(sp) %>% 
   summarise(occupancy=sum(count)/nrow(locs)) # divided the sum by the number of sites
 
 # add the results to the sp_summary
-sp_summary <- left_join(sp_summary, tmp)
+sp_summary <- left_join(sp_summary, OccuSummary)
 
 
 ###########################
@@ -501,6 +509,7 @@ fig2 <- plot_ly(x = sp_summary$occupancy, y = sp_summary$common_name, type = 'ba
  layout(yaxis = yform, xaxis=xform)
 
 subplot(nrows=1,fig1, fig2, titleX = T) # We could stack them on top of one another using nrows=2
+
 ```
 
 For the top twenty detected species, the treatment-specific capture rates are as follows:
@@ -583,6 +592,7 @@ ggplot(plot_data, aes(x=1, y = common_name, fill = capture_rate_log)) +
     axis.title.x = element_text(size = 14),
     plot.title = element_text(size = 16)
   )
+
 ```
 
 ## Spatial plot of capture rates
@@ -593,11 +603,11 @@ The overall capture rate by camera trap location.
  total_obs <- left_join(total_obs, locs)
  sp_list <- sp_summary$sp     
       # Calculate overall capture rate (sum of all species)
-      overall_cr <- total_obs %>% 
-        mutate(
-          total_detections = rowSums(select(., all_of(sp_list)), na.rm = TRUE),
-          CaptureRate = total_detections / (days / 100)
-        )
+ overall_cr <- total_obs %>%
+   mutate(
+     total_detections = rowSums(select(., all_of(sp_list)), na.rm = TRUE),
+     CaptureRate = total_detections / (days / 100)
+     )
       
       # Calculate min and max for legend
       max_cr <- max(overall_cr$CaptureRate, na.rm = TRUE)
@@ -661,8 +671,6 @@ for(species in Mammalspp) {
 }
 
 #################################################################
-library(leaflet)
-library(leaflet.extras)
 
 map <- leaflet() %>%
   addProviderTiles(providers$Esri.WorldImagery) %>%
