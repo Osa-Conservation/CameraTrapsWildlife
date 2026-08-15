@@ -464,16 +464,16 @@ sppSummary <- long_obs %>%                   # Take the long observation data fr
           summarise(count=sum(count)) # Sum all the independent observations
 
 # Add it to the sp_summary dataframe
-sp_summary0 <- left_join(sp_summary0, sppSummary)
+sp_summary <- left_join(sp_summary0, sppSummary)
 
 ## Occupancy
 # We use the mutate function to mutate the column
 total_binary <-  total_obs %>%    # The total obs dataframe              
-                    mutate(across(sp_summary0$sp, ~+as.logical(.x)))  # across all of the species columns, make it binary
+                    mutate(across(sp_summary$sp, ~+as.logical(.x)))  # across all of the species columns, make it binary
 
 # Flip the dataframe to longer - as before
 long_bin <- total_binary %>% 
-  pivot_longer(cols=sp_summary0$sp, names_to="sp", values_to = "count") # Takes the species names columns, and makes them unique rows with "sp" as the key 
+  pivot_longer(cols=sp_summary$sp, names_to="sp", values_to = "count") # Takes the species names columns, and makes them unique rows with "sp" as the key 
 
 # We can now sum the presence/absences and divide by the number of survey locations
 OccuSummary <- long_bin %>% 
