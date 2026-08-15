@@ -482,6 +482,8 @@ OccuSummary <- long_bin %>%
 
 # add the results to the sp_summary
 
+sp_summary <- sp_summary[order(sp_summary$count),]
+
 
 ```
 
@@ -593,7 +595,6 @@ Check the number of records and the occupancy
 ###########################
 # Comparison plot
 # Lets put the dataframes in a sensible order
-sp_summary <- sp_summary[order(sp_summary$count),]
 
 yform <- list(categoryorder = "array",
               categoryarray = sp_summary$sp)
