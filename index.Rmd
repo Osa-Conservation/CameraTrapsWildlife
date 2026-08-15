@@ -482,7 +482,7 @@ OccuSummary <- long_bin %>%
 
 # add the results to the sp_summary
 
-sp_summary <- sp_summary[order(sp_summary$count),]
+sp_summary <- sp_summary[order(sp_summary$count),] #final
 
 
 ```
