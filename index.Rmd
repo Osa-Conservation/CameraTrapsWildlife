@@ -16,7 +16,7 @@ editor_options:
 
 # Introduction
 
-Wildlife is one of the programs that Osa Consevation harbours, you can hace a look of the organizacion here: https://osaconservation.org/
+Wildlife is one of the programs that Osa Consevation harbours, you can have a look of the organizacion here: https://osaconservation.org/
 
 
 The main goal of Wildlife program is to understand, protect and restore wildlife within the Amistosa climate lifeboat for future generations through biodiversity monitoring at the landscape scale, application of conservation technologies, engaging local stakeholders, and adopting evidence-based restoration techniques, ultimately advancing climate change adaptation and resilience of the South Pacific region of Costa Rica.
