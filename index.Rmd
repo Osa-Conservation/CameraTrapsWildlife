@@ -16,12 +16,12 @@ editor_options:
 
 # Introduction
 
-Wildlife is one of the programs that Osa Consevation harbours, you can have a look of the organizacion here: https://osaconservation.org/
+Wildlife is one of the programs that Osa Consevation harbours, you can have a look of the organization here: https://osaconservation.org/
 
 
 The main goal of Wildlife program is to understand, protect and restore wildlife within the Amistosa climate lifeboat for future generations through biodiversity monitoring at the landscape scale, application of conservation technologies, engaging local stakeholders, and adopting evidence-based restoration techniques, ultimately advancing climate change adaptation and resilience of the South Pacific region of Costa Rica.
 
-One of the main tools used here are camera traps. Those are automa
+One of the main tools used here are camera traps. Those are automa...
 
 Here we provide the main results of the current projects carried out by our team.
 
@@ -106,6 +106,11 @@ leaflet(LTM_Map2) %>%
 img0 <- read.csv("data/images_2003884.csv", header=T)
 dep0 <- read.csv("data/deployments.csv", header=T)
 
+SitesByPy0<-dep0 %>% 
+  select(placename, longitude, latitude, subproject_name) %>% 
+  filter(subproject_name!="") %>% 
+  mutate(comment=NA) %>% 
+  distinct(placename, .keep_all = TRUE)  # Keep all columns but unique by placename
 
 #drive_download(file = as_id("1lPTSXAw_YVvB2u7tIJKGeGL1XLhi3IB__ikZbcTsXhQ"), path = paste0("data/", "Arboreal Bridge_Camera trap deployments_database.xlsx"), overwrite = TRUE)
 
@@ -137,20 +142,33 @@ PuentesSites2<-PuentesSites %>%
   rename(placename=Bridge_code, 
          longitude=Longitude, 
          latitude=Latitude,
-         comment="2027_active")
+         comment="2027_active") %>% 
+  distinct(placename, .keep_all = TRUE)  
 
-SitesByPy0<-dep0 %>% 
-  select(placename, longitude, latitude, subproject_name) %>% 
-  filter(subproject_name!="") %>% 
-  mutate(comment=NA) %>% 
-  distinct(placename, .keep_all = TRUE)  # Keep all columns but unique by placename
+######
+
+# Download the Wildlife Insights data and format it
+
+#drive_download(file = as_id("1idkheeEPzP2X2sVGeTfmJMhbw0xhj7Tr"), path = paste0("data/", "DeploymentsPiro.csv"), overwrite = TRUE)
+
+PiroPlotSites0<-read.csv("data/DeploymentsPiro.csv", header=T)
+
+PiroPlotSites<-PiroPlotSites0 %>% 
+  select(placename, longitude, latitude) %>% 
+  mutate(
+    subproject_name="Piro Plots",
+    comment = case_when(
+      substr(placename, 4, 4) == "F" ~ "Forest",
+      TRUE ~ "Restoration"
+    )
+  )
 
 
-SitesByPy<-rbind(SitesByPy0,PuentesSites2)
+SitesByPy<-rbind(SitesByPy0,PuentesSites2,PiroPlotSites)
 
 # Create the leaflet map
 pal <- colorFactor(
-  palette = c("#FED789FF", "#023743FF", "#72874EFF", "#476F84FF", "#A4BED5FF", "#BEB59CFF"),  # specify your colors
+  palette = c("#639CA4FF", "#023743FF", "#72874EFF", "#476F84FF", "#A4BED5FF", "#BEB59CFF", "#DABD61FF"),  # specify your colors
   domain = SitesByPy$subproject_name
 )
 
