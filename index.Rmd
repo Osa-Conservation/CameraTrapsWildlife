@@ -61,6 +61,102 @@ library(stringr)
 
 ```
 
+Here are the points of all the projects in Wildlife Insights
+
+```{r, echo=F, message=F, include=F}
+
+#Import the shapefiles for the maps
+
+#dir.create("shapefiles")
+#shp_folder <- drive_ls(path = as_id("1tIPtT8gXcLRPW26IqH1wOjm9_cjhJG9L"), recursive=T)
+
+#drive_download(file = as_id(shp_folder$id[2]), path = paste0("shapefiles/", shp_folder$name[2]), overwrite = TRUE)
+
+LTM_Map <- st_read("shapefiles/LongTermMonitoring2026.kml")
+LTM_Map2<- st_zm(LTM_Map, drop = TRUE, what = "ZM")
+
+
+leaflet(LTM_Map2) %>% 
+  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addProviderTiles(providers$OpenStreetMap, group = "Street Map") %>%
+  addCircleMarkers(
+    radius = 3, 
+    fillOpacity = 0.8
+  ) %>% 
+  addLayersControl(
+    baseGroups = c("Street Map","Satellite"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  addScaleBar(position = "topright")
+
+```
+
+
+```{r}
+# Download the Wildlife Insights data and format it
+#WildlifeInsights_folder <- drive_ls(path = as_id("1L-NrbOSaqtxzHrukcuxZAXSg4Ate35iA"), recursive=T)
+
+#download images
+#drive_download(file = as_id(WildlifeInsights_folder$id[2]), path = WildlifeInsights_folder$name[2], overwrite = TRUE)
+
+#Download deployments
+#drive_download(file = as_id(WildlifeInsights_folder$id[5]), path =  WildlifeInsights_folder$name[5], overwrite = TRUE)
+
+img0 <- read.csv("data/images_2003884.csv", header=T)
+dep0 <- read.csv("data/deployments.csv", header=T)
+
+SitesByPy<-dep0 %>% 
+  select(placename, longitude, latitude, subproject_name) %>% 
+  distinct(placename, .keep_all = TRUE)  # Keep all columns but unique by placename
+
+
+# Create the leaflet map
+pal <- colorFactor(
+  palette = c("#FED789FF", "#023743FF", "#72874EFF", "#476F84FF", "#A4BED5FF"),  # specify your colors
+  domain = SitesByPy$subproject_name
+)
+
+# Create the leaflet map
+LocationsMap <- leaflet(data = SitesByPy) %>%
+  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addProviderTiles(providers$OpenStreetMap, group = "Street Map") %>%
+  addCircleMarkers(
+    lng = ~longitude,
+    lat = ~latitude,
+    radius = 5,
+    fillOpacity = 0.8,
+    color = ~pal(subproject_name),  # Color by subproject
+    fillColor = ~pal(subproject_name),
+    weight = 1,
+    opacity = 1,
+    popup = ~paste(
+      "<strong>Site:</strong>", placename, "<br>",
+      "<strong>Project:</strong>", subproject_name, "<br>",
+      "<strong>Coordinates:</strong>", round(longitude, 4), ",", round(latitude, 4)
+    ),
+    label = ~placename,
+    group = ~subproject_name  # This allows toggling by project
+  ) %>%
+  addLayersControl(
+    position = "topleft",
+    baseGroups = c("Satellite", "Street Map"),
+    overlayGroups = unique(SitesByPy$subproject_name),  # Toggle projects on/off
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = pal,
+    values = ~subproject_name,
+    title = "Subproject",
+    opacity = 0.8
+  )
+
+LocationsMap
+
+
+```
+
+
 # Piro Restoration Plots
 
 
@@ -81,53 +177,10 @@ library(stringr)
 *Introduction:* Loren ipsum ...
 
 
-```{r, c02, include=F, message=F, warning=F, results="hide"}
-
-#Import the shapefiles for the maps
-
-#dir.create("shapefiles")
-#shp_folder <- drive_ls(path = as_id("1tIPtT8gXcLRPW26IqH1wOjm9_cjhJG9L"), recursive=T)
-
-#drive_download(file = as_id(shp_folder$id[2]), path = paste0("shapefiles/", shp_folder$name[2]), overwrite = TRUE)
-
-LTM_Map <- st_read("shapefiles/LongTermMonitoring2026.kml")
-LTM_Map2<- st_zm(LTM_Map, drop = TRUE, what = "ZM")
-
-```
-
-Here goes the map
-
-```{r}
-
-leaflet(LTM_Map2) %>% 
-  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
-  addProviderTiles(providers$OpenStreetMap, group = "Street Map") %>%
-  addCircleMarkers(
-    radius = 3, 
-    fillOpacity = 0.8
-  ) %>% 
-  addLayersControl(
-    baseGroups = c("Street Map","Satellite"),
-    options = layersControlOptions(collapsed = FALSE)
-  ) %>%
-  addScaleBar(position = "topright")
-
-```
 
 The following represents the data exploration for the data collected for the project:
 
 ``` {r}
-# Download the Wildlife Insights data and format it
-#WildlifeInsights_folder <- drive_ls(path = as_id("1L-NrbOSaqtxzHrukcuxZAXSg4Ate35iA"), recursive=T)
-
-#download images
-#drive_download(file = as_id(WildlifeInsights_folder$id[2]), path = WildlifeInsights_folder$name[2], overwrite = TRUE)
-
-#Download deployments
-#drive_download(file = as_id(WildlifeInsights_folder$id[5]), path =  WildlifeInsights_folder$name[5], overwrite = TRUE)
-
-img0 <- read.csv("data/images_2003884.csv", header=T)
-dep0 <- read.csv("data/deployments.csv", header=T)
 
 #Subset Long Term Monitoring
 dep<-dep0 %>% 
@@ -279,7 +332,7 @@ img_subBird<-img_sub %>% filter(class=="Aves")
 
 Which results in `r nrow(img_sub)` identifiable wildlife images of `r length(unique(img_sub$common_name))` species. Including `r length(unique(img_subMammal$common_name))` Mammals and `r length(unique(img_subBird$common_name))` Birds.
 
-Now, we goint to check the results bases od independent records:
+Now, we goint to check the results bases of independent records:
 
 
 ```{r}
@@ -487,6 +540,17 @@ sp_summary <- sp_summary[order(sp_summary$count),] #final
 
 ```
 
+Here goes the full list of species
+
+```{r}
+
+sp_summary %>%
+  arrange(desc(class), order, family, genus, desc(sp)) %>%
+  kbl() %>%
+  kable_classic_2(full_width = F)
+
+```
+
 
 How is the distribution of Threatened species in our records?
 
@@ -612,7 +676,7 @@ yform <- list(categoryorder = "array",
 xform <- list(title="Independent detections")
 
 # Capture rate
-fig1 <- plot_ly(x = sp_summary$count, y = sp_summary$common_name, type = 'bar', orientation = 'h', showlegend=F) %>% 
+fig1 <- plot_ly(x = sp_summary$count, y = sp_summary$sp, type = 'bar', orientation = 'h', showlegend=F) %>% 
  layout(yaxis = yform, xaxis=xform)
 
 yform <- list(categoryorder = "array",
@@ -622,7 +686,7 @@ xform <- list(title="Occupancy")
 
 
 # Occupancy
-fig2 <- plot_ly(x = sp_summary$occupancy, y = sp_summary$common_name, type = 'bar', orientation = 'h', showlegend=F) %>% 
+fig2 <- plot_ly(x = sp_summary$occupancy, y = sp_summary$sp, type = 'bar', orientation = 'h', showlegend=F) %>% 
  layout(yaxis = yform, xaxis=xform)
 
 subplot(nrows=1,fig1, fig2, titleX = T) # We could stack them on top of one another using nrows=2
