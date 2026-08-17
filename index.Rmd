@@ -37,6 +37,7 @@ library(leaflet)
 library(leaflet.extras)
 library(units)
 library(sf)
+library(DT)
 library(viridis)
 library(kableExtra)
 library(lubridate)
@@ -544,10 +545,28 @@ Here goes the full list of species
 
 ```{r}
 
+#sp_summary %>%
+#  arrange(desc(class), order, family, genus, desc(sp)) %>%
+#  kbl() %>%
+#  kable_classic_2(full_width = F)
+
 sp_summary %>%
   arrange(desc(class), order, family, genus, desc(sp)) %>%
-  kbl() %>%
-  kable_classic_2(full_width = F)
+  datatable(
+    options = list(
+      pageLength = 10,  # Show 10 rows per page
+      lengthMenu = c(5, 10, 25, 50, 100),  # Allow user to choose rows per page
+      scrollX = TRUE,
+      searching = TRUE,  # Enable search/filter
+      ordering = TRUE,   # Allow column sorting
+      columnDefs = list(
+        list(className = 'dt-center', targets = '_all')  # Center align
+      )
+    ),
+    filter = 'top',  # Add filter boxes at top of each column
+    rownames = FALSE,
+    class = 'cell-border stripe hover'
+  )
 
 ```
 
