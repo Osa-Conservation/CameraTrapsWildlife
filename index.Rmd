@@ -168,7 +168,7 @@ SitesByPy<-rbind(SitesByPy0,PuentesSites2,PiroPlotSites)
 
 # Create the leaflet map
 pal <- colorFactor(
-  palette = c("#639CA4FF", "#023743FF", "#72874EFF", "#476F84FF", "#A4BED5FF", "#BEB59CFF", "#DABD61FF"),  # specify your colors
+  palette = c("#639CA4FF", "#023743FF", "#72874EFF", "#476F84FF", "#A4BED5FF", "#BEB59CFF", "#DABD61FF"),  # specify your color pallete
   domain = SitesByPy$subproject_name
 )
 
