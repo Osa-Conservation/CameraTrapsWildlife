@@ -106,14 +106,51 @@ leaflet(LTM_Map2) %>%
 img0 <- read.csv("data/images_2003884.csv", header=T)
 dep0 <- read.csv("data/deployments.csv", header=T)
 
-SitesByPy<-dep0 %>% 
+
+#drive_download(file = as_id("1lPTSXAw_YVvB2u7tIJKGeGL1XLhi3IB__ikZbcTsXhQ"), path = paste0("data/", "Arboreal Bridge_Camera trap deployments_database.xlsx"), overwrite = TRUE)
+
+PuentesSites <- read_excel(
+  "data/Arboreal Bridge_Camera trap deployments_database.xlsx", 
+  sheet = "Camera_Site",
+  col_types = c("text", "text", "text", "text", "text", "text", 
+                "text", "text", "text", "text", "text", "text",
+                "text", "text", "text", "text", "text", "text",
+                "text", "text", "text", "text", "text", "text",
+                "text", "text", "text", "text", "text", "text")
+) %>%
+  mutate(
+    Latitude = case_when(
+      Latitude == "870158.0" ~ "8.70158",
+      TRUE ~ Latitude
+    ),
+    Longitude = case_when(
+      Longitude == "-8360904.0" ~ "-83.60904",
+      TRUE ~ Longitude
+    ),
+    Latitude = as.numeric(Latitude),
+    Longitude = as.numeric(Longitude)
+  )
+
+PuentesSites2<-PuentesSites %>% 
+  select(Bridge_code, Longitude, Latitude, "2027_active") %>% 
+  mutate(subproject_name="Arboreal Bridges") %>% 
+  rename(placename=Bridge_code, 
+         longitude=Longitude, 
+         latitude=Latitude,
+         comment="2027_active")
+
+SitesByPy0<-dep0 %>% 
   select(placename, longitude, latitude, subproject_name) %>% 
+  filter(subproject_name!="") %>% 
+  mutate(comment=NA) %>% 
   distinct(placename, .keep_all = TRUE)  # Keep all columns but unique by placename
 
 
+SitesByPy<-rbind(SitesByPy0,PuentesSites2)
+
 # Create the leaflet map
 pal <- colorFactor(
-  palette = c("#FED789FF", "#023743FF", "#72874EFF", "#476F84FF", "#A4BED5FF"),  # specify your colors
+  palette = c("#FED789FF", "#023743FF", "#72874EFF", "#476F84FF", "#A4BED5FF", "#BEB59CFF"),  # specify your colors
   domain = SitesByPy$subproject_name
 )
 
