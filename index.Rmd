@@ -107,9 +107,11 @@ img0 <- read.csv("data/images_2003884.csv", header=T)
 dep0 <- read.csv("data/deployments.csv", header=T)
 
 SitesByPy0<-dep0 %>% 
-  select(placename, longitude, latitude, subproject_name) %>% 
+  select(placename, longitude, latitude, subproject_name, start_date, end_date) %>% 
   filter(subproject_name!="") %>% 
-  mutate(comment=NA) %>% 
+  mutate(comment=NA,
+         start_date=as.Date(start_date),
+         end_date=as.Date(end_date)) %>% 
   distinct(placename, .keep_all = TRUE)  # Keep all columns but unique by placename
 
 #drive_download(file = as_id("1lPTSXAw_YVvB2u7tIJKGeGL1XLhi3IB__ikZbcTsXhQ"), path = paste0("data/", "Arboreal Bridge_Camera trap deployments_database.xlsx"), overwrite = TRUE)
@@ -118,7 +120,7 @@ PuentesSites <- read_excel(
   "data/Arboreal Bridge_Camera trap deployments_database.xlsx", 
   sheet = "Camera_Site",
   col_types = c("text", "text", "text", "text", "text", "text", 
-                "text", "text", "text", "text", "text", "text",
+                "text", "text", "text", "text", "date", "date",
                 "text", "text", "text", "text", "text", "text",
                 "text", "text", "text", "text", "text", "text",
                 "text", "text", "text", "text", "text", "text")
@@ -137,13 +139,31 @@ PuentesSites <- read_excel(
   )
 
 PuentesSites2<-PuentesSites %>% 
-  select(Bridge_code, Longitude, Latitude, "2027_active") %>% 
+  select(Bridge_code, Longitude, Latitude, "2027_active", Bridge_Installation_Date, Bridge_Collection_Date) %>% 
   mutate(subproject_name="Arboreal Bridges") %>% 
   rename(placename=Bridge_code, 
          longitude=Longitude, 
          latitude=Latitude,
+         start_date=Bridge_Installation_Date,
+         end_date=Bridge_Collection_Date,
          comment="2027_active") %>% 
   distinct(placename, .keep_all = TRUE)  
+
+OsagridStations<-read.csv("data/clean_station_OSAGRID.csv")
+
+OsagridSites<-OsagridStations %>% 
+  select(STATION, X, Y, START, END) %>% 
+  mutate(
+    subproject_name="Osa Grid",
+    comment = NA) %>% 
+rename(placename=STATION, 
+       longitude=X, 
+       latitude=Y,
+       start_date=START,
+       end_date=END
+  ) %>% 
+  filter(!is.na(longitude))
+
 
 ######
 
@@ -154,35 +174,63 @@ PuentesSites2<-PuentesSites %>%
 PiroPlotSites0<-read.csv("data/DeploymentsPiro.csv", header=T)
 
 PiroPlotSites<-PiroPlotSites0 %>% 
-  select(placename, longitude, latitude) %>% 
+  select(placename, longitude, latitude, start_date, end_date) %>% 
   mutate(
-    subproject_name="Piro Plots",
+    subproject_name="Piro Restoration Plots",
     comment = case_when(
       substr(placename, 4, 4) == "F" ~ "Forest",
       TRUE ~ "Restoration"
     )
-  )
+  ) %>% 
+  distinct(placename, .keep_all = TRUE) 
 
 
 SitesByPy<-rbind(SitesByPy0,PuentesSites2,PiroPlotSites)
 
 # Create the leaflet map
-pal <- colorFactor(
-  palette = c("#639CA4FF", "#023743FF", "#72874EFF", "#476F84FF", "#A4BED5FF", "#BEB59CFF", "#DABD61FF"),  # specify your color pallete
+paleta <- colorFactor(
+  palette = c("#023743FF", "#476F84FF",  "#639CA4FF", "#A4BED5FF","#72874EFF", "#BEB59CFF", "#DABD61FF", "#CD950CFF"),  # specify your color pallete
   domain = SitesByPy$subproject_name
 )
+
+FechasByPj <- SitesByPy %>% 
+  select(subproject_name, start_date, end_date) %>%
+  group_by(subproject_name) %>%
+  summarise(
+    earliest_start_date = min(start_date, na.rm = TRUE),
+    latest_end_date = max(end_date, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+Chronograma <- FechasByPj %>%
+  ggplot(aes(y = reorder(subproject_name, earliest_start_date))) +
+  geom_segment(aes(x = earliest_start_date, 
+                   xend = latest_end_date,
+                   yend = subproject_name,
+                   colour=subproject_name),
+               size = 10, alpha = 0.6) +
+  scale_color_manual(values = paleta(unique(FechasByPj$subproject_name))) +
+  labs(x = "Date", y = "Project Name") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  scale_x_datetime(date_breaks = "1 year", date_labels = "%Y")
+
+Chronograma
+
+SitesByPy<-rbind(SitesByPy0,PuentesSites2,PiroPlotSites,OsagridSites)
+
 
 # Create the leaflet map
 LocationsMap <- leaflet(data = SitesByPy) %>%
   addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
   addProviderTiles(providers$OpenStreetMap, group = "Street Map") %>%
-  addCircleMarkers(
+ addCircleMarkers(
     lng = ~longitude,
     lat = ~latitude,
     radius = 5,
     fillOpacity = 0.8,
-    color = ~pal(subproject_name),  # Color by subproject
-    fillColor = ~pal(subproject_name),
+    color = ~paleta(subproject_name),  # Color by subproject
+    fillColor = ~paleta(subproject_name),
     weight = 1,
     opacity = 1,
     popup = ~paste(
@@ -201,13 +249,91 @@ LocationsMap <- leaflet(data = SitesByPy) %>%
   ) %>%
   addLegend(
     position = "bottomright",
-    pal = pal,
+    pal = paleta,
     values = ~subproject_name,
     title = "Subproject",
     opacity = 0.8
+  ) 
+
+LocationsMap 
+
+```
+
+
+
+```{r, eval=FALSE, echo=F, message=F, include=F}
+
+
+###########################
+
+library(purrr)
+
+SitesByPy_long2 <- SitesByPy %>%
+  mutate(
+    end_date = as.Date(ifelse(is.na(end_date), today(), end_date))
+  ) %>%
+    rowwise() %>%
+  mutate(
+    date = list(seq.Date(start_date, end_date, by = "day"))
+  ) %>%
+  unnest(date) %>%
+  select(placename, longitude, latitude, subproject_name, date) %>%
+  ungroup()
+
+
+SitesByPy.sf<-st_as_sf(SitesByPy_long2, coords = c("longitude","latitude"))
+SitesByPy.sf <- st_cast(SitesByPy.sf, "POINT")
+
+
+########
+library(leaflet.extras2)
+leaflet() %>%
+  addTiles() %>%
+  leaflet.extras2::addPlayback(data = SitesByPy.sf,
+                              #popup = ~popup,
+                              #label=~label,
+                              time = "date",
+                              options = playbackOptions(radius = 3,
+                                                        tickLen = 1000000,
+                                                        speed = 5000,
+                                                        maxInterpolationTime = 10000,
+                                                        pathOpts = pathOptions(
+                                                          weight = 5)
+                                                        )
+                              )
+#########
+
+
+####
+SitesByPy.sf2<-SitesByPy.sf %>% 
+mutate(
+    popup = paste0(
+      "<strong>Site:</strong> ", placename, "<br>",
+      "<strong>Project:</strong> ", subproject_name, "<br>",
+      "<strong>Date:</strong> ", format(date, "%Y-%m-%d")
+    ),
+    label = placename,
+    point_color = paleta(subproject_name)
   )
 
-LocationsMap
+SitesByPy_long3<-split(SitesByPy.sf2, f = SitesByPy.sf$placename)
+
+##############################3
+
+leaflet() %>%
+  addTiles() %>%
+  leaflet.extras2::addPlayback(data = SitesByPy_long3,
+                              popup = ~popup,
+                              time = "date",
+                              color=point_color,
+                              options = playbackOptions(radius = 3,
+                                                        tickLen = 1000000,
+                                                        speed = 5000,
+                                                        maxInterpolationTime = 10000,
+                                                        pathOpts = pathOptions(
+                                                          weight = 5)
+                                                        )
+                              )
 
 
 ```
@@ -215,17 +341,197 @@ LocationsMap
 
 # Piro Restoration Plots
 
+```{r}
+
+SitesSpecific<-SitesByPy %>% 
+  filter(subproject_name=="Piro Restoration Plots")
+
+
+LocationsMap <- leaflet(data = SitesSpecific) %>%
+  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addProviderTiles(providers$OpenStreetMap, group = "Street Map") %>%
+ addCircleMarkers(
+    lng = ~longitude,
+    lat = ~latitude,
+    radius = 5,
+    fillOpacity = 0.8,
+    color = ~paleta(subproject_name),  # Color by subproject
+    fillColor = ~paleta(subproject_name),
+    weight = 1,
+    opacity = 1,
+    popup = ~paste(
+      "<strong>Site:</strong>", placename, "<br>",
+      "<strong>Project:</strong>", subproject_name, "<br>",
+      "<strong>Coordinates:</strong>", round(longitude, 4), ",", round(latitude, 4)
+    ),
+    label = ~placename,
+    group = ~subproject_name  # This allows toggling by project
+  ) %>%
+  addLayersControl(
+    position = "topleft",
+    baseGroups = c("Satellite", "Street Map"),
+    overlayGroups = unique(SitesByPy$subproject_name),  # Toggle projects on/off
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = paleta,
+    values = ~subproject_name,
+    title = "Subproject",
+    opacity = 0.8
+  ) 
+
+LocationsMap 
+
+```
+
 
 # Exploration to Fila Costeña
+
+
+```{r}
+
+SitesSpecific<-SitesByPy %>% 
+  filter(subproject_name=="Fila Costeña")
+
+
+LocationsMap <- leaflet(data = SitesSpecific) %>%
+  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addProviderTiles(providers$OpenStreetMap, group = "Street Map") %>%
+ addCircleMarkers(
+    lng = ~longitude,
+    lat = ~latitude,
+    radius = 5,
+    fillOpacity = 0.8,
+    color = ~paleta(subproject_name),  # Color by subproject
+    fillColor = ~paleta(subproject_name),
+    weight = 1,
+    opacity = 1,
+    popup = ~paste(
+      "<strong>Site:</strong>", placename, "<br>",
+      "<strong>Project:</strong>", subproject_name, "<br>",
+      "<strong>Coordinates:</strong>", round(longitude, 4), ",", round(latitude, 4)
+    ),
+    label = ~placename,
+#    group = ~subproject_name  # This allows toggling by project
+  ) %>%
+  addLayersControl(
+    position = "topleft",
+    baseGroups = c("Satellite", "Street Map"),
+#    overlayGroups = unique(SitesByPy$subproject_name),  # Toggle projects on/off
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = paleta,
+    values = ~subproject_name,
+    title = "Subproject",
+    opacity = 0.8
+  ) 
+
+LocationsMap 
+
+```
 
 
 # Campus volunteers cameras
 
 
+
+
 # Arboreal Bridges
 
 
+```{r}
+
+SitesSpecific<-SitesByPy %>% 
+  filter(subproject_name=="Arboreal Bridges")
+
+
+LocationsMap <- leaflet(data = SitesSpecific) %>%
+  addProviderTiles(providers$OpenStreetMap, group = "Street Map") %>%
+  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addCircleMarkers(
+    lng = ~longitude,
+    lat = ~latitude,
+    radius = 5,
+    fillOpacity = 0.8,
+    color = ~paleta(subproject_name),  # Color by subproject
+    fillColor = ~paleta(subproject_name),
+    weight = 1,
+    opacity = 1,
+    popup = ~paste(
+      "<strong>Site:</strong>", placename, "<br>",
+      "<strong>Project:</strong>", subproject_name, "<br>",
+      "<strong>Coordinates:</strong>", round(longitude, 4), ",", round(latitude, 4)
+    ),
+    label = ~placename,
+    group = ~subproject_name  # This allows toggling by project
+  ) %>%
+  addLayersControl(
+    position = "topleft",
+    baseGroups = c("Street Map","Satellite"),
+    #overlayGroups = unique(SitesByPy$subproject_name),  # Toggle projects on/off
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = paleta,
+    values = ~subproject_name,
+    title = "Subproject",
+    opacity = 0.8
+  ) 
+
+LocationsMap 
+
+```
+
+
 # Farms for Nature
+
+```{r}
+
+SitesSpecific<-SitesByPy %>% 
+  filter(subproject_name=="FarmsforNature")
+
+
+LocationsMap <- leaflet(data = SitesSpecific) %>%
+  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addProviderTiles(providers$OpenStreetMap, group = "Street Map") %>%
+ addCircleMarkers(
+    lng = ~longitude,
+    lat = ~latitude,
+    radius = 5,
+    fillOpacity = 0.8,
+    color = ~paleta(subproject_name),  # Color by subproject
+    fillColor = ~paleta(subproject_name),
+    weight = 1,
+    opacity = 1,
+    popup = ~paste(
+      "<strong>Site:</strong>", placename, "<br>",
+      "<strong>Project:</strong>", subproject_name, "<br>",
+      "<strong>Coordinates:</strong>", round(longitude, 4), ",", round(latitude, 4)
+    ),
+    label = ~placename,
+    group = ~subproject_name  # This allows toggling by project
+  ) %>%
+  addLayersControl(
+    position = "topleft",
+    baseGroups = c("Satellite", "Street Map"),
+#    overlayGroups = unique(SitesByPy$subproject_name),  # Toggle projects on/off
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = paleta,
+    values = ~subproject_name,
+    title = "Subproject",
+    opacity = 0.8
+  ) 
+
+LocationsMap 
+
+```
 
 
 # Long Term Monitoring
@@ -290,21 +596,47 @@ To date we have deployed `r nrow(dep)` cameras, at `r length(unique(dep$placenam
 
 ```{r, cam_dat}
 
-# Create the leaflet map
-LocationsMap <- leaflet(data = dep) %>%
+SitesSpecific<-SitesByPy %>% 
+  filter(subproject_name=="Long Term Monitoring")
+
+
+LocationsMap <- leaflet(data = SitesSpecific) %>%
   addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
-  addProviderTiles(providers$OpenStreetMap, group = "Street Map")  %>%
-  addCircleMarkers(
-    radius = 3, 
-    fillOpacity = 0.8
+  addProviderTiles(providers$OpenStreetMap, group = "Street Map") %>%
+ addCircleMarkers(
+    lng = ~longitude,
+    lat = ~latitude,
+    radius = 5,
+    fillOpacity = 0.8,
+    color = ~paleta(subproject_name),  # Color by subproject
+    fillColor = ~paleta(subproject_name),
+    weight = 1,
+    opacity = 1,
+    popup = ~paste(
+      "<strong>Site:</strong>", placename, "<br>",
+      "<strong>Project:</strong>", subproject_name, "<br>",
+      "<strong>Coordinates:</strong>", round(longitude, 4), ",", round(latitude, 4)
+    ),
+    label = ~placename,
   ) %>%
   addLayersControl(
     position = "topleft",
     baseGroups = c("Satellite", "Street Map"),
+#on/off
     options = layersControlOptions(collapsed = FALSE)
-  )
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = paleta,
+    values = ~subproject_name,
+    title = "Subproject",
+    opacity = 0.8
+  ) 
 
-LocationsMap
+LocationsMap 
+
+```
+
 
 ```
 
