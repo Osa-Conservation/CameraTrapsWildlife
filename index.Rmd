@@ -1,7 +1,7 @@
 ---
 title: "Camera traps Wildlife"
 author:
-  - Osa Conservation Wildlife Team and Earthwatch
+  - Osa Conservation Wildlife Team
 site: bookdown::bookdown_site
 output:
   bookdown::gitbook:
@@ -19,14 +19,16 @@ editor_options:
 Wildlife is one of the programs that Osa Consevation harbours, you can have a look of the organization here: https://osaconservation.org/
 
 
-The main goal of Wildlife program is to understand, protect and restore wildlife within the Amistosa climate lifeboat for future generations through biodiversity monitoring at the landscape scale, application of conservation technologies, engaging local stakeholders, and adopting evidence-based restoration techniques, ultimately advancing climate change adaptation and resilience of the South Pacific region of Costa Rica.
+The main goal of Wildlife program is to understand, protect and restore wildlife within the Amistosa climate corridor for future generations through biodiversity monitoring at the landscape scale, application of conservation technologies, engaging local stakeholders, and adopting evidence-based restoration techniques, ultimately advancing climate change adaptation and resilience of the South Pacific region of Costa Rica.
 
-One of the main tools used here are camera traps. Those are automa...
+One of the main tools used here are camera traps. Those are non-invasive motion-activated devices strategically placed across the corridor to capture high-resolution images and videos of wildlife in their natural habitat. They enable us to document species presence, behavior, and activity patterns 24/7, while also detecting rare, nocturnal and even arboreal species that are difficult to observe directly. The data collected feed into long-term databases, allowing us to track temporal and spatial changes in biodiversity, identify threats such as poaching or habitat fragmentation, and measure the effectiveness of our restoration and conservation actions over time.
 
 Here we provide the main results of the current projects carried out by our team.
 
 
 ## Study area and survey locations
+
+In the last five years, the Wildlife program has executed several camera trap surveys along our influence area. Each one has an specific goal and you can see the details in their respective sections. 
 
 ```{r c01, echo=F, message=F, include=F}
 knitr::opts_chunk$set(echo = FALSE, message=F, warning=F)
@@ -62,7 +64,6 @@ library(stringr)
 
 ```
 
-Here are the points of all the projects in Wildlife Insights
 
 ```{r, echo=F, message=F, include=F}
 
@@ -219,7 +220,12 @@ Chronograma
 
 SitesByPy<-rbind(SitesByPy0,PuentesSites2,PiroPlotSites,OsagridSites)
 
+```
 
+Here you can explore the locations of all the cameras. You can activate and deactivate the locations per specific project.
+
+
+```{r}
 # Create the leaflet map
 LocationsMap <- leaflet(data = SitesByPy) %>%
   addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
