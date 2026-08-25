@@ -222,6 +222,7 @@ SitesByPy<-rbind(SitesByPy0,PuentesSites2,PiroPlotSites,OsagridSites)
 
 ```
 
+
 Here you can explore the locations of all the cameras. You can activate and deactivate the locations per specific project.
 
 
@@ -448,6 +449,57 @@ LocationsMap
 
 # Campus volunteers cameras
 
+*Introduction*:
+
+Using a participatory approach, we deployed the largest camera-trap network in Mesoamerica to date to investigate how anthropogenic disturbance shapes the occupancy and cooccurrence of terrestrial vertebrate species in the Osa Peninsula, Costa Rica. To determine how anthropogenic factors and habitat quality determine the distribution of our study species, we set up camera-trap stations throughout the study area on lands with different protection categories and different degrees of anthropogenic disturbance. We deployed 120 camera-trap stations in a 4 × 4 km square grid, maintaining at least 1000 m between them. This cell size provided an optimum balance of
+coverage and resolution of the study area and maintained independence among stations for species with large home ranges (e.g., jaguars and peccaries).
+
+
+```{r}
+
+SitesSpecific<-SitesByPy %>% 
+  filter(subproject_name=="Osa Grid")
+
+
+LocationsMap <- leaflet(data = SitesSpecific) %>%
+  addProviderTiles(providers$Esri.WorldImagery, group = "Satellite") %>%
+  addProviderTiles(providers$OpenStreetMap, group = "Street Map") %>%
+ addCircleMarkers(
+    lng = ~longitude,
+    lat = ~latitude,
+    radius = 5,
+    fillOpacity = 0.8,
+    color = ~paleta(subproject_name),  # Color by subproject
+    fillColor = ~paleta(subproject_name),
+    weight = 1,
+    opacity = 1,
+    popup = ~paste(
+      "<strong>Site:</strong>", placename, "<br>",
+      "<strong>Project:</strong>", subproject_name, "<br>",
+      "<strong>Coordinates:</strong>", round(longitude, 4), ",", round(latitude, 4)
+    ),
+    label = ~placename,
+#    group = ~subproject_name  # This allows toggling by project
+  ) %>%
+  addLayersControl(
+    position = "topleft",
+    baseGroups = c("Satellite", "Street Map"),
+#    overlayGroups = unique(SitesByPy$subproject_name),  # Toggle projects on/off
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    pal = paleta,
+    values = ~subproject_name,
+    title = "Subproject",
+    opacity = 0.8
+  ) 
+
+LocationsMap 
+
+```
+
+# Osa Grid
 
 
 
