@@ -262,8 +262,6 @@ LocationsMap
 
 
 ```{r, eval=FALSE, echo=F, message=F, include=F}
-
-
 ###########################
 
 library(purrr)
@@ -636,10 +634,6 @@ LocationsMap <- leaflet(data = SitesSpecific) %>%
 LocationsMap 
 
 ```
-
-
-```
-
 
 Fist take a look of the chronology of the deployments:
 
