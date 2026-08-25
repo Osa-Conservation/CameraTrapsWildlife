@@ -339,6 +339,10 @@ leaflet() %>%
 
 # Piro Restoration Plots
 
+*Introduction:* While active restoration strategies can be a powerful approach to restoring forests, it is usually a costly approach to worldwide forest restoration programs. Thus, it becomes necessary to shed light on how different restoration approaches benefit biodiversity recovery. Under such circumstances, biodiversity studies on restoring ecosystems in developing tropical countries are mandatory, and thus, restoration experiments in these regions are exceptionally valuable. The objective of this research study is to test the efficacy of different restoration approaches on the biodiversity in a Neotropical forest of Central America. We tested the efficacy of several different forest restoration strategies within the Osa Peninsula of southwestern Costa Rica to restore abandoned cattle pasture.
+
+The restoration experiment comprises forty 0.5-ha experimental plots. The plots were established and planted in 2017 and 2018. Forty plots were originally divided into four treatments, each with 10 replicates based on planting regimes of pioneer species and a natural regeneration control. In addition to the experimental restoration plots, we survey 10 mature forest recording sites in old growth forest and in 50 year old secondary growth forest.
+
 ```{r}
 
 SitesSpecific<-SitesByPy %>% 
@@ -385,6 +389,10 @@ LocationsMap
 
 
 # Exploration to Fila Costeña
+
+Fila Costeña is a mountain range located parallel to the coast, with steep slopes ending in a narrow plain, and forming part of the Pacific slope of the Cordillera de Talamanca system. Fila Costeña's complex topography, combined with its relatively recent emergence and subsequent isolation from lowland Pacific forests not only qualifies as a Key Biodiversity Area of international significance (Key Biodiversity Areas Partnership, 2026), but also represents an important stepping stone for wildlife dispersal among the nearest protected areas, make it a critical area for understanding the biodiversity in the Amistosa Biological Corridor. 
+
+Entre 2023 y 2026, nuestro equipo visitó [] sitios... 
 
 
 ```{r}
@@ -439,6 +447,12 @@ LocationsMap
 
 # Arboreal Bridges
 
+*Introduction:* Roads fragment tropical rainforests and pose a significant threat to arboreal (canopy-dwelling) mammals, which rely on continuous forest cover to move, forage, and reproduce. In the Osa Peninsula, Costa Rica—a global biodiversity hotspot—an expanding road network disconnects protected areas and increases wildlife-vehicle collisions. To address this challenge, Osa Conservation initiated the Arboreal Wildlife Bridge Program in December 2020.
+
+Since 2020 we installed [] arboreal bridges over unpaved roads. Using camera traps at both ends of each bridge, we monitored wildlife use recording [] independent crossing events by at least [] mammal species, including threatened and roadkill-affected taxa such as the Central American spider monkey (Ateles geoffroyi), red-backed squirrel monkey (Saimiri oerstedii), and Mexican porcupine (Coendou mexicanus).
+
+To identify priority locations for future crossings, we implemented camera trap surveys to identifying wildlife activity. This project demonstrates that strategically placed, well-designed arboreal bridges are an effective conservation tool for restoring canopy connectivity in tropical rainforests. 
+
 
 ```{r}
 
@@ -487,6 +501,10 @@ LocationsMap
 
 # Farms for Nature
 
+*Introduction:* Because monitoring all aspects of biodiversity is logistically and financially prohibitive, umbrella, flagship, and indicator species were developed as a conservation strategy to monitor and protect entire communities using a single-species approach (Simberloff 1998). These species are generally wide-ranging and charismatic, and their presence is believed to reflect ecosystem health (Simberloff 1998; McGowan et al. 2020). Therefore, we will use the presence of three indicator groups to reflect changes and improvements in biodiversity on individual farms. The three groups are felids, game birds, and large herbivores (i.e., tapirs, Tapirus bairdii, or white-lipped peccaries, Tayassu pecari), and their presence would imply improvements in ecological and habitat conditions. We expect the presence of these indicator species to increase throughout the 5-year monitoring period provided the restoration areas are adequately managed and restoration efforts are successful. The number of groups detected on farms will determine the number of credits granted to farmers. 
+
+The goal of the project is to quantify biodiversity “gains” on farms participating in the Farms for Nature program as a way to monitor restoration success and the impact of improved farming practices and interventions at the farm level on enhancing biodiversity.
+
 ```{r}
 
 SitesSpecific<-SitesByPy %>% 
@@ -534,7 +552,7 @@ LocationsMap
 
 # Long Term Monitoring
 
-*Introduction:* Loren ipsum ...
+*Introduction:* 
 
 
 
