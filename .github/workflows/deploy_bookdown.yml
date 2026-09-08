@@ -41,8 +41,8 @@ jobs:
             "googledrive",
             "scales",
             "tidyr",
-            "ggrepel"
-            "stringr"
+            "ggrepel" ,
+            "stringr" ,
             "ggridges"
           ))'
 
