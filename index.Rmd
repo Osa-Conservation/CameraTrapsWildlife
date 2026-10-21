@@ -96,6 +96,8 @@ leaflet(LTM_Map2) %>%
 
 ```{r}
 # Download the Wildlife Insights data and format it
+dir.create("data")
+
 WildlifeInsights_folder <- drive_ls(path = as_id("1L-NrbOSaqtxzHrukcuxZAXSg4Ate35iA"), recursive=T)
 
 #download images
@@ -115,7 +117,14 @@ SitesByPy0<-dep0 %>%
          end_date=as.Date(end_date)) %>% 
   distinct(placename, .keep_all = TRUE)  # Keep all columns but unique by placename
 
-drive_download(file = as_id("1lPTSXAw_YVvB2u7tIJKGeGL1XLhi3IB__ikZbcTsXhQ"), path = paste0("data/", "Arboreal Bridge_Camera trap deployments_database.xlsx"), overwrite = TRUE)
+
+#Puentes
+
+# Download the Wildlife Insights data and format it
+Databases_folder <- drive_ls(path = as_id("1GHC_EBh3O248qb2iIJFssz5jhTfEdo5h"), recursive=T)
+
+####
+drive_download(file = as_id(Databases_folder$id[1]), path = paste0("data/", as_id(Databases_folder$id[1])), overwrite = TRUE)
 
 PuentesSites <- read_excel(
   "data/Arboreal Bridge_Camera trap deployments_database.xlsx", 
