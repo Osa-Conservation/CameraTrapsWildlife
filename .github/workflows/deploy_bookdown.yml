@@ -48,7 +48,7 @@ jobs:
 
       - name: Render Book
         env: 
-          GOOGLE_AUTHENTICATION_CREDENTIALS: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS }}
+          GOOGLE_WILDLIFE_CREDENTIAL ${{ secrets.GOOGLE_WILDLIFE_CREDENTIAL }}
         run: Rscript -e 'bookdown::render_book("index.Rmd")'  
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
