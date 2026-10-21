@@ -2111,7 +2111,9 @@ sp_summary<-sp_summary %>%
 fig2 <- plot_ly(x = sp_summary$occupancy, y = sp_summary$sp, type = 'bar', orientation = 'h', showlegend=F) %>% 
  layout(yaxis = yform, xaxis=xform)
 
-subplot(nrows=1,fig1, fig2, titleX = T) # We could stack them on top of one another using nrows=2
+fig1
+
+fig2 # We could stack them on top of one another using nrows=2
 
 ```
 
