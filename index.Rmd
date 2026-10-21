@@ -124,7 +124,7 @@ SitesByPy0<-dep0 %>%
 Databases_folder <- drive_ls(path = as_id("1GHC_EBh3O248qb2iIJFssz5jhTfEdo5h"), recursive=T)
 
 ####
-drive_download(file = as_id(Databases_folder$id[1]), path = paste0("data/", as_id(Databases_folder$id[1])), overwrite = TRUE)
+drive_download(file = as_id(Databases_folder$id[1]), path = paste0("data/", Databases_folder$name[1]), overwrite = TRUE)
 
 PuentesSites <- read_excel(
   "data/Arboreal Bridge_Camera trap deployments_database.xlsx", 
