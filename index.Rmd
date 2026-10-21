@@ -104,7 +104,13 @@ leaflet(LTM_Map2) %>%
 # Download the Wildlife Insights data and format it
 dir.create("data")
 
-WildlifeInsights_folder <- drive_ls(path = as_id("1L-NrbOSaqtxzHrukcuxZAXSg4Ate35iA"), recursive=T)
+WildlifeInsights_folder <- tryCatch(
+  drive_ls(path = as_id("1L-NrbOSaqtxzHrukcuxZAXSg4Ate35iA"), recursive = TRUE),
+  error = function(e) {
+    message("drive_ls failed: ", conditionMessage(e))
+    NULL
+  }
+)
 
 #download images
 drive_download(file = as_id(WildlifeInsights_folder$id[2]), path = paste0("data/", WildlifeInsights_folder$name[2]), overwrite = TRUE)
