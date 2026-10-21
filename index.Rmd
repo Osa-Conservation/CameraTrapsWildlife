@@ -54,7 +54,7 @@ library(ggridges)
 
 
 #drive_auth()
-#googledrive::drive_auth(path = Sys.getenv("GOOGLE_AUTHENTICATION_CREDENTIALS"))
+googledrive::drive_auth(path = Sys.getenv("GOOGLE_AUTHENTICATION_CREDENTIALS"))
 #data_path <- "data"
 #dir.create(data_path) 
 
@@ -69,10 +69,10 @@ library(ggridges)
 
 #Import the shapefiles for the maps
 
-#dir.create("shapefiles")
-#shp_folder <- drive_ls(path = as_id("1tIPtT8gXcLRPW26IqH1wOjm9_cjhJG9L"), recursive=T)
+dir.create("shapefiles")
+shp_folder <- drive_ls(path = as_id("1tIPtT8gXcLRPW26IqH1wOjm9_cjhJG9L"), recursive=T)
 
-#drive_download(file = as_id(shp_folder$id[2]), path = paste0("shapefiles/", shp_folder$name[2]), overwrite = TRUE)
+drive_download(file = as_id(shp_folder$id[12]), path = paste0("shapefiles/", shp_folder$name[2]), overwrite = TRUE)
 
 LTM_Map <- st_read("shapefiles/LongTermMonitoring2026.kml")
 LTM_Map2<- st_zm(LTM_Map, drop = TRUE, what = "ZM")
@@ -96,13 +96,13 @@ leaflet(LTM_Map2) %>%
 
 ```{r}
 # Download the Wildlife Insights data and format it
-#WildlifeInsights_folder <- drive_ls(path = as_id("1L-NrbOSaqtxzHrukcuxZAXSg4Ate35iA"), recursive=T)
+WildlifeInsights_folder <- drive_ls(path = as_id("1L-NrbOSaqtxzHrukcuxZAXSg4Ate35iA"), recursive=T)
 
 #download images
-#drive_download(file = as_id(WildlifeInsights_folder$id[2]), path = WildlifeInsights_folder$name[2], overwrite = TRUE)
+drive_download(file = as_id(WildlifeInsights_folder$id[2]), path = paste0("data/", WildlifeInsights_folder$name[2]), overwrite = TRUE)
 
 #Download deployments
-#drive_download(file = as_id(WildlifeInsights_folder$id[5]), path =  WildlifeInsights_folder$name[5], overwrite = TRUE)
+drive_download(file = as_id(WildlifeInsights_folder$id[5]), path =  paste0("data/", WildlifeInsights_folder$name[5]), overwrite = TRUE)
 
 img0 <- read.csv("data/images_2003884.csv", header=T)
 dep0 <- read.csv("data/deployments.csv", header=T)
@@ -115,7 +115,7 @@ SitesByPy0<-dep0 %>%
          end_date=as.Date(end_date)) %>% 
   distinct(placename, .keep_all = TRUE)  # Keep all columns but unique by placename
 
-#drive_download(file = as_id("1lPTSXAw_YVvB2u7tIJKGeGL1XLhi3IB__ikZbcTsXhQ"), path = paste0("data/", "Arboreal Bridge_Camera trap deployments_database.xlsx"), overwrite = TRUE)
+drive_download(file = as_id("1lPTSXAw_YVvB2u7tIJKGeGL1XLhi3IB__ikZbcTsXhQ"), path = paste0("data/", "Arboreal Bridge_Camera trap deployments_database.xlsx"), overwrite = TRUE)
 
 PuentesSites <- read_excel(
   "data/Arboreal Bridge_Camera trap deployments_database.xlsx", 
@@ -150,6 +150,13 @@ PuentesSites2<-PuentesSites %>%
          comment="2027_active") %>% 
   distinct(placename, .keep_all = TRUE)  
 
+
+data_folder <- drive_ls(path = as_id("1GHC_EBh3O248qb2iIJFssz5jhTfEdo5h"), recursive=T)
+
+#
+drive_download(file = as_id("1kzbKCtfkGReiDquQIvXqaw9RuxCewJaj"), path = paste0("data/", "clean_station_OSAGRID.csv"), overwrite = TRUE)
+
+
 OsagridStations<-read.csv("data/clean_station_OSAGRID.csv")
 
 OsagridSites<-OsagridStations %>% 
@@ -170,7 +177,7 @@ rename(placename=STATION,
 
 # Download the Wildlife Insights data and format it
 
-#drive_download(file = as_id("1idkheeEPzP2X2sVGeTfmJMhbw0xhj7Tr"), path = paste0("data/", "DeploymentsPiro.csv"), overwrite = TRUE)
+drive_download(file = as_id("1idkheeEPzP2X2sVGeTfmJMhbw0xhj7Tr"), path = paste0("data/", "DeploymentsPiro.csv"), overwrite = TRUE)
 
 PiroPlotSites0<-read.csv("data/DeploymentsPiro.csv", header=T)
 
@@ -399,8 +406,7 @@ LocationsMap
 
 Fila Costeña is a mountain range located parallel to the coast, with steep slopes ending in a narrow plain, and forming part of the Pacific slope of the Cordillera de Talamanca system. Fila Costeña's complex topography, combined with its relatively recent emergence and subsequent isolation from lowland Pacific forests not only qualifies as a Key Biodiversity Area of international significance (Key Biodiversity Areas Partnership, 2026), but also represents an important stepping stone for wildlife dispersal among the nearest protected areas, make it a critical area for understanding the biodiversity in the Amistosa Biological Corridor. 
 
-Entre 2023 y 2026, nuestro equipo visitó [] sitios... 
-
+Our survey represents the first exploration of mammals on Fila Costeña, filling a important gap and likely a climatic stepping-stone in terms of the corridors system proposed for the South Pacific of Costa Rica.
 
 ```{r}
 
@@ -444,14 +450,8 @@ LocationsMap <- leaflet(data = SitesSpecific) %>%
 
 LocationsMap 
 
-```
-
-*Estas son las figuras de Sabir*
-
-```{r}
 
 #Sabir data
-# note: OCCT35_M00_29042023 is missing a camera code. It has been assigned to M00 for this analysis.
 
 
 #Subset Fila Costeña
@@ -526,33 +526,12 @@ independent_events <- df3 |>
 species_independent_events <- independent_events %>%
   filter(
     species!="",
-    common_name!=""
+    common_name!="",
   ) %>%
-  group_by(common_name) %>%
+  group_by(class,common_name) %>%
   summarise(
     total_events = sum(event, na.rm = TRUE)
   )
-
-
-ggplot(species_independent_events, 
-       aes(x = reorder(common_name, total_events), 
-           y = total_events)) +
-  geom_col() +
-  geom_text(
-      aes(label = total_events),
-      hjust = -0.2,
-      size = 3
-    ) +
-  coord_flip() +
-  labs(
-    x = "Species",
-    y = "No. of independent events",
-    title = "Independent events by species")+
-  theme_minimal() +
-  theme(
-    legend.position = "none"
-  ) +
-  expand_limits(y = max(species_independent_events$total_events) * 1.1)
 
 # effort
 
@@ -566,8 +545,28 @@ camera_effort <- deployments_clean %>%
   select(
     placename,
     deployment_id,
-    trap_days
+    trap_days,
   )
+
+
+```
+
+
+Between 2023 and 2026, our team visited  `r lenght(unique(deployments$placename)` sites.
+
+Total Species.
+`r length(unique(species_independent_events$common_name))`
+
+
+
+`r mean(camera_effort$trap_days)`
+`r sd(camera_effort$trap_days)`
+`r max(camera_effort$trap_days)`
+
+`r length(unique(species_independent_events$common_name))`
+
+
+```{r}
 
 camera_effort %>%
   filter(!is.na(placename)) %>%
@@ -599,35 +598,66 @@ allEvents <- sum(species_independent_events$total_events, na.rm = TRUE)
 relative_abundance <- species_independent_events %>%
   mutate(
     RAI = round(total_events / allEvents * 100, 1)
+  ) 
+
+#################
+# Create a treemap
+
+relative_abundanceM<-relative_abundance %>%
+  filter(class=="Mammalia")
+
+relative_abundanceA<-relative_abundance %>%
+  filter(class=="Aves")
+    
+
+plot_treemapM <- relative_abundanceM %>%
+  arrange(desc(RAI)) %>%
+  plot_ly(
+    type = "treemap",
+    labels = ~common_name,
+    values = ~RAI,
+    parents = NA,  # No hierarchy, just flat structure
+    textinfo = "label+value",
+    #texttemplate = "<b>%{label}</b><br>Frequency: %{value}<br>%{percentRoot:.1%}",
+    marker = list(
+      colors = ~RAI,
+      colorscale = "Plasma",
+      showscale = FALSE,
+      colorbar = list(title = "Detection Frequency")
+    )
   ) %>%
-  select(
-    common_name,
-    RAI
+  layout(
+    title = "Species Relative Abundance for Mammals",
+    margin = list(l = 0, r = 0, b = 0, t = 50)
   )
 
-ggplot(relative_abundance,
-	aes(
-		x = RAI,
-		y = reorder(common_name, RAI)
-)
-) + geom_col() +
-geom_text(
-aes(label = RAI),
-hjust = -0.2,
-	size = 3
-) +
-labs(
-    x = "Relative abundance index",
-    y = "Species",
-    title = "Relative abundance of species"
-  ) +
-  theme_minimal() +
-  theme(
-      legend.position = "none"
-  ) +
-  expand_limits(
-    x = max(relative_abundance$RAI, na.rm = TRUE) * 1.1
+# Display the treemap
+plot_treemapM
+
+
+plot_treemapA <- relative_abundanceA %>%
+  arrange(desc(RAI)) %>%
+  plot_ly(
+    type = "treemap",
+    labels = ~common_name,
+    values = ~RAI,
+    parents = NA,  # No hierarchy, just flat structure
+    textinfo = "label+value",
+    marker = list(
+      colors = ~RAI,
+      colorscale = "Blues",
+      showscale = FALSE,
+      colorbar = list(title = "Detection Frequency for Birds")
+    )
+  ) %>%
+  layout(
+    title = "Species Relative Abudnance for Birds",
+    margin = list(l = 0, r = 0, b = 0, t = 50)
   )
+
+# Display the treemap
+plot_treemapA
+
 ```
 
 
@@ -652,53 +682,28 @@ naive_occupancy <- independent_events %>%
         ]
       )
   ) %>%
-  arrange(desc(naive_occupancy))
-
-ggplot(
-  naive_occupancy,
-  aes(
-    x = naive_occupancy,
-    y = reorder(common_name, naive_occupancy)
-    )
-) +
-  geom_col() +
-  
-  # Percentage displayed at the right end of each bar
-  geom_text(
-    aes(
-      label = paste0(round(naive_occupancy, 1), "%")
-    ),
-    hjust = -0.2,
-    size = 3
-  ) +
-  
-  # X-axis
-  scale_x_continuous(
-    limits = c(0, 110),
-    breaks = seq(0, 100, 10),
-    labels = function(x) paste0(x, "%")
-  ) +
-  
-  # Labels
-  labs(
-    x = "Naive occupancy (%)",
-    y = "Species"
-  ) +
-  
-  # Theme
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    panel.grid.major.y = element_blank(),
-    panel.grid.minor = element_blank()
-  )
-
-naive_occupancy2<-naive_occupancy %>% 
+  arrange(desc(naive_occupancy))%>% 
   left_join(relative_abundance, by="common_name")
 
-ggplot(naive_occupancy2, aes(x=naive_occupancy, y=RAI, label = common_name))+
-  geom_point(size=2.5)+
-  geom_text_repel(size = 3, max.overlaps = 20)
+
+plot_ly(
+  data = naive_occupancy,
+  x = ~naive_occupancy,
+  y = ~RAI,
+  text = ~common_name,
+  type = "scatter",
+  mode = "markers",
+  marker = list(size = 8),
+  hovertemplate = paste(
+    "<b>%{text}</b><br>",
+    "Naive Occupancy: %{x:.3f}<br>",
+    "RAI: %{y:.2f}<extra></extra>"
+  )
+) %>%
+  layout(
+    xaxis = list(title = "Naive Occupancy"),
+    yaxis = list(title = "Relative Abundance Index")
+  )
 
 ```
 
@@ -712,6 +717,9 @@ ChronoPlot <- plot_ly()
 
 # We want a separate row for each 'placename' - so lets turn it into a factor
 dep$placename <- as.factor(dep$placename)
+dep$start_date<-as.Date(dep$start_date)
+dep$end_date<-as.Date(dep$end_date)
+
 
 # loop through each place name
 for(i in seq_along(levels(dep$placename)))
@@ -747,7 +755,12 @@ for(i in seq_along(levels(dep$placename)))
    layout(yaxis = list(
       ticktext = as.list(levels(dep$placename)), 
       tickvals = as.list(1:length(levels(dep$placename))),
-      tickmode = "array"))
+      tickmode = "array"),
+    xaxis = list(
+      title = "Date",
+      tickformat = "%Y-%m-%d"  # Format as yyyy-mm-dd
+    )
+  )
 
 ChronoPlot
 
@@ -1430,13 +1443,26 @@ LocationsMap
 
 PuentesMasterData<-read_excel("data/VideoMasterData_2023-2025.xlsx", sheet = "video_dataedited")
 
-CotoBrus<-PuentesMasterData %>% 
-  filter(Bridge_ID=="Sabalito1"|Bridge_ID=="Sabalito2"|Bridge_ID=="SanVito1") 
+
+Osa0<-c("Puente10",   "Puente11",   "Puente12",   "Puente13"  , "Puente14", "Puente15",   "Puente16", "Puente5",    "Puente6")
+PJ0<-c("Puente17", "Puente18", "Trocha1", "Trocha2", "Kathy1", "Puente30",  "Puente1"   ,"Puente2" ,   "Puente3"   , "Puente4" ,   "Puente7",     "Puente8",     "Puente9")
+Golfito0<-c( "Golfito1" ,  "Golfito2"  , "Golfito3" , 
+ "Golfito4",   "Golfito5",   "Golfito6" ,  "Golfito7"  , "Golfito8")
+BuenosAires0 <-c("Changuena1", "Changuena2","BajoCoto1")
+CotoBrus0<-c( "Sabalito1",  "Sabalito2",  "SanVito1" )
+
+
 
 CotoBrus<-PuentesMasterData %>% 
-  filter(Bridge_ID %in% c("Changuena1",
-                           "Changuena2",
-                           "BajoCoto1"))
+  filter(Bridge_ID %in%  Golfito0) 
+
+species_count <- table(CotoBrus$Bridge_ID, CotoBrus$Species)
+species_count_df <- as.data.frame.matrix(species_count)
+
+# Add a total column
+species_count_df$Total_Species <- rowSums(species_count_df > 0)
+
+View(t(species_count_df))
 
 ##########################################
 ChronoPlot <-plot_ly(
@@ -1481,6 +1507,73 @@ PuentesMasterDataWildife<-PuentesMasterData %>%
 
 
 Especies<-table(PuentesMasterDataWildife$Species, PuentesMasterDataWildife$Behavior)
+Especies_df <- as.data.frame.matrix(Especies)
+Especies_df$Species <- rownames(Especies_df)
+
+Especies_long <- Especies_df %>%
+  pivot_longer(
+    cols = -Species,
+    names_to = "Behavior",
+    values_to = "Count"
+  )
+
+
+# Create the heatmap with log scale
+ggplot(Especies_long, aes(x=Behavior, y = Species, fill = Count)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = round(Count, 1), color = "white"), size = 3) +
+  scale_fill_viridis_c(option = "plasma", 
+                       trans = "log10",
+                       breaks = c(0.1, 1, 10, 100),
+                       labels = c("0.1", "1", "10", "100"),
+                       name = "Videos") +
+  scale_color_identity() +
+    labs(
+    x = "Comportamiento",
+    y = "Especie",
+    ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 0,  size = 12),
+    axis.text.y = element_text(size = 10),
+    axis.title.x = element_text(size = 14),
+    plot.title = element_text(size = 16)
+  )
+###################
+
+#Golfito
+
+Golfito<-PuentesMasterData %>% 
+  filter(Bridge_ID %in%  Golfito0) 
+
+
+
+ChronoPlot <-plot_ly(
+  data = Golfito,
+  x = ~Date,
+  y = ~Bridge_ID,
+  type = 'scatter',
+  mode = 'markers',
+  marker = list(size = 7, color = 'steelblue'),
+  text = ~paste("Bridge:", Bridge_ID, "<br>Date:", Date, "<br>Species:", Species),
+  hoverinfo = 'text'
+) %>%
+  layout(
+    title = "Activity Chronoplot by Bridge",
+    xaxis = list(title = "Date", type = 'date'),
+    yaxis = list(title = "Bridge ID"),
+    showlegend = FALSE
+  )
+
+ChronoPlot
+
+
+
+Golfitowildlife<-Golfito %>% 
+   filter(!Species %in% c("Homo sapiens_setup", "NA", "Other"))
+
+
+Especies<-table(Golfitowildlife$Species, Golfitowildlife$Behavior)
 Especies_df <- as.data.frame.matrix(Especies)
 Especies_df$Species <- rownames(Especies_df)
 
