@@ -70,9 +70,10 @@ googledrive::drive_auth(path = Sys.getenv("GOOGLE_AUTHENTICATION_CREDENTIALS"))
 #Import the shapefiles for the maps
 
 dir.create("shapefiles")
+
 shp_folder <- drive_ls(path = as_id("1tIPtT8gXcLRPW26IqH1wOjm9_cjhJG9L"), recursive=T)
 
-drive_download(file = as_id(shp_folder$id[12]), path = paste0("shapefiles/", shp_folder$name[2]), overwrite = TRUE)
+drive_download(file = as_id(shp_folder$id[12]), path = paste0("shapefiles/", shp_folder$name[12]), overwrite = TRUE)
 
 LTM_Map <- st_read("shapefiles/LongTermMonitoring2026.kml")
 LTM_Map2<- st_zm(LTM_Map, drop = TRUE, what = "ZM")
