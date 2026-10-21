@@ -54,7 +54,12 @@ library(ggridges)
 
 
 #drive_auth()
+
+options(googledrive_quiet = TRUE)
+
+# For when the trapping effort file is sorted
 googledrive::drive_auth(path = Sys.getenv("GOOGLE_AUTHENTICATION_CREDENTIALS"))
+
 #data_path <- "data"
 #dir.create(data_path) 
 
