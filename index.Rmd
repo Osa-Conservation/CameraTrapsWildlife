@@ -55,8 +55,6 @@ library(ggridges)
 
 #drive_auth()
 
-options(googledrive_quiet = TRUE)
-
 # For when the trapping effort file is sorted
 googledrive::drive_auth(path = Sys.getenv("GOOGLE_WILDLIFE_CREDENTIAL"))
 
@@ -1454,7 +1452,7 @@ LocationsMap
 
 ```{r}
 
-#drive_download(file = as_id("1-GNvMPiRLHc-3GX5281-X5KNhtShVaaCCeoC6XeR7Y0"), path = paste0("data/", "VideoMasterData_2023-2025.xlsx"), overwrite = TRUE)
+drive_download(file = as_id("1-GNvMPiRLHc-3GX5281-X5KNhtShVaaCCeoC6XeR7Y0"), path = paste0("data/", "VideoMasterData_2023-2025.xlsx"), overwrite = TRUE)
 
 PuentesMasterData<-read_excel("data/VideoMasterData_2023-2025.xlsx", sheet = "video_dataedited")
 
@@ -1481,7 +1479,7 @@ View(t(species_count_df))
 
 ##########################################
 ChronoPlot <-plot_ly(
-  data = PuentesMasterData,
+  data = CotoBrus,
   x = ~Date,
   y = ~Bridge_ID,
   type = 'scatter',
@@ -1585,7 +1583,8 @@ ChronoPlot
 
 
 Golfitowildlife<-Golfito %>% 
-   filter(!Species %in% c("Homo sapiens_setup", "NA", "Other"))
+  filter(Bridge_ID=="Golfito7") %>% 
+  filter(!Species %in% c("Homo sapiens_setup", "NA", "Other"))
 
 
 Especies<-table(Golfitowildlife$Species, Golfitowildlife$Behavior)
