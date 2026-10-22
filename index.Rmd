@@ -102,13 +102,16 @@ leaflet(LTM_Map2) %>%
 # Download the Wildlife Insights data and format it
 dir.create("data")
 
-WildlifeInsights_folder <- drive_ls(path = as_id("1L-NrbOSaqtxzHrukcuxZAXSg4Ate35iA"), recursive=T)
+# Download the Wildlife Insights data and format it
 
+drive_download(file = as_id("1idkheeEPzP2X2sVGeTfmJMhbw0xhj7Tr"), path = paste0("data/", "DeploymentsPiro.csv"), overwrite = TRUE)
+
+#WildlifeInsights_folder <- drive_ls(path = as_id("1L-NrbOSaqtxzHrukcuxZAXSg4Ate35iA"), recursive=T)
 #download images
-drive_download(file = as_id(WildlifeInsights_folder$id[2]), path = paste0("data/", WildlifeInsights_folder$name[2]), overwrite = TRUE)
+drive_download(file = as_id("1DQPV2zGmB9ZjGUgT---vuajqlo7hwDWu"), path = paste0("data/", "images_2003884.csv"), overwrite = TRUE)
 
 #Download deployments
-drive_download(file = as_id(WildlifeInsights_folder$id[5]), path =  paste0("data/", WildlifeInsights_folder$name[5]), overwrite = TRUE)
+drive_download(file = as_id("1ZBosED7oqfSKmMhIeXGYhrlgA3MbC54Q"), path =  paste0("data/", "deployments.csv"), overwrite = TRUE)
 
 img0 <- read.csv("data/images_2003884.csv", header=T)
 dep0 <- read.csv("data/deployments.csv", header=T)
@@ -187,10 +190,6 @@ rename(placename=STATION,
 
 
 ######
-
-# Download the Wildlife Insights data and format it
-
-drive_download(file = as_id("1idkheeEPzP2X2sVGeTfmJMhbw0xhj7Tr"), path = paste0("data/", "DeploymentsPiro.csv"), overwrite = TRUE)
 
 PiroPlotSites0<-read.csv("data/DeploymentsPiro.csv", header=T)
 
