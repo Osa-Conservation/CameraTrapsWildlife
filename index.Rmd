@@ -564,7 +564,7 @@ camera_effort <- deployments_clean %>%
 ```
 
 
-Between 2023 and 2026, our team visited  `r lenght(unique(deployments$placename))` sites.
+Between 2023 and 2026, our team visited  `r length(unique(deployments$placename))` sites.
 
 Total Species.
 `r length(unique(species_independent_events$common_name))`
