@@ -1469,7 +1469,7 @@ species_count_df <- as.data.frame.matrix(species_count)
 # Add a total column
 species_count_df$Total_Species <- rowSums(species_count_df > 0)
 
-View(t(species_count_df))
+#View(t(species_count_df))
 
 ##########################################
 ChronoPlot <-plot_ly(
@@ -1617,7 +1617,6 @@ ggplot(Especies_long, aes(x=Behavior, y = Species, fill = Count)) +
 
 
 ```
-
 
 
 # Farms for Nature
