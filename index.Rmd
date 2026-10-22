@@ -1049,7 +1049,7 @@ How is the distribution of Threatened species in our records?
 
 ```{r}
 
-#drive_download(file = as_id("1MtXa2adHajT0hOuPNKd0JE2L-Qrp_U3T"), path = paste0("data/", "species_lists.xlsx"), overwrite = TRUE)
+drive_download(file = as_id("1MtXa2adHajT0hOuPNKd0JE2L-Qrp_U3T"), path = paste0("data/", "species_lists.xlsx"), overwrite = TRUE)
 
 sp_mam <- read_excel("data/species_lists.xlsx", sheet="mammals_list") 
 #sp_amp <- read_excel("data/species_lists.xlsx", sheet="amphibians_list") 
